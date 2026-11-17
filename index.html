@@ -139,6 +139,7 @@ table.lg td{vertical-align:top;font-size:13px;padding:8px 5px}table.lg td.small,
 .la{display:inline-block;font-size:11px;font-weight:800;padding:1px 7px;border-radius:7px;margin-right:4px;color:#fff}
 .la-g{background:#2E7D4F}.la-o{background:#D9822B}.la-r{background:#b23a2a}.la-b{background:#1F4E3D}.la-x{background:#8a968f}
 .qrow .btn{padding:6px 9px;font-size:12px}
+.xdel{border:0;background:#FDECEA;color:#b23a2a;border-radius:7px;width:26px;height:26px;font-size:13px;font-weight:800;cursor:pointer}
 .vids{margin:22px 0 4px}
 .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .promo{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--tx);background:#fff;border:1px solid var(--ln);border-radius:12px;padding:6px}
@@ -318,6 +319,7 @@ function logDesc(e){const b=e.before||{},a=e.after||{};
     case 'admin_add':return `<span class="la la-x">관리자 추가</span> ${esc(a.name||'')}`;
     case 'admin_remove':return `<span class="la la-x">관리자 삭제</span> ${esc(b.name||'')}`;
     case 'admin_rename':return `<span class="la la-x">이름 변경</span> ${esc(b.name||'')} → <b>${esc(a.name||'')}</b>`;
+    case 'log_delete':return `<span class="la la-r">기록 삭제</span> ${a.count}건`;
     case 'admin_code':return `<span class="la la-x">번호 변경</span> ${esc(a.name||'')}`;
   } return esc(e.action)}
 function fmtT(t){const d=new Date(t);return d.toLocaleString('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}
@@ -326,8 +328,8 @@ function vLog(){
   const names=[...new Set(LOG.map(e=>e.admin_name))];
   const list=LOG.filter(e=>!LOGF||e.admin_name===LOGF);
   let h=`<div class="card"><h2>사용 기록 <small>관리자만 보임 · 최근 ${LOG.length}건 · 누가 언제 무엇을 바꿨는지 자동 기록</small></h2>
-  <div class="seg"><button class="${!LOGF?'on':''}" onclick="LOGF='';render()">전체</button>${names.map(n=>`<button class="${LOGF===n?'on':''}" onclick="LOGF=${esc(JSON.stringify(n))};render()">${esc(n)}</button>`).join('')}<button onclick="LOG=null;render()">↻ 새로고침</button></div>
-  ${list.length?`<div class="scroll"><table class="lg"><tr><th>시각</th><th>관리자</th><th class="l">내용</th></tr>${list.map(e=>`<tr><td class="small">${fmtT(e.at)}</td><td><b>${esc(e.admin_name)}</b></td><td class="l">${logDesc(e)}</td></tr>`).join('')}</table></div>`:'<div class="small">아직 기록이 없습니다.</div>'}</div>`;
+  <div class="seg"><button class="${!LOGF?'on':''}" onclick="LOGF='';render()">전체</button>${names.map(n=>`<button class="${LOGF===n?'on':''}" onclick="LOGF=${esc(JSON.stringify(n))};render()">${esc(n)}</button>`).join('')}<button onclick="LOG=null;render()">↻ 새로고침</button>${ME&&ME.master&&list.length?`<button style="border-color:#f3c4bd;color:#b23a2a" onclick="delLogAll()">${LOGF?esc(LOGF)+' 기록 ':'기록 '}전체 삭제</button>`:''}</div>
+  ${list.length?`<div class="scroll"><table class="lg"><tr><th>시각</th><th>관리자</th><th class="l">내용</th>${ME&&ME.master?'<th></th>':''}</tr>${list.map(e=>`<tr><td class="small">${fmtT(e.at)}</td><td><b>${esc(e.admin_name)}</b></td><td class="l">${logDesc(e)}</td>${ME&&ME.master?`<td><button class="xdel" aria-label="이 기록 삭제" onclick="delLog(${e.id})">✕</button></td>`:''}</tr>`).join('')}</table></div>`:'<div class="small">아직 기록이 없습니다.</div>'}</div>`;
   if(ME&&ME.master){
     h+=`<div class="card"><h2>관리자 번호 관리 <small>총괄 관리자만 보임</small></h2>
     <div class="small" style="margin-bottom:8px">운영진마다 다른 번호를 주면, 그 번호로 한 작업이 이름과 함께 기록됩니다.</div>
@@ -352,6 +354,9 @@ async function doCode(){const c=document.getElementById('min').value.trim(),er=d
   if(m?c.length<6:!/^[0-9]{4,8}$/.test(c)){er.textContent=m?'6자 이상 입력해 주세요.':'숫자 4~8자리로 입력해 주세요.';return}
   er.textContent='저장 중…';const r=await SB.rpc('admin_set_code',{pw:PW,target:ADMT.id,new_code:c});if(r.error){er.textContent=/in use/.test(r.error.message)?'이미 다른 관리자가 쓰는 번호입니다.':'변경하지 못했습니다.';return}
   if(ME&&ME.id===ADMT.id){PW=c;try{localStorage.setItem('bd_pw',c)}catch(e){}}closeModal();toast(ADMT.n+' 번호를 바꿨습니다');LOG=null;render()}
+function delLog(id){ADMT={ids:[id]};const e=LOG.find(x=>x.id===id);admModal('기록 삭제',`<div class="small">이 기록 1건을 삭제할까요?</div><div style="margin:8px 0;font-size:13px">${e?fmtT(e.at)+' · <b>'+esc(e.admin_name)+'</b><br>'+logDesc(e):''}</div><div class="small">삭제한 사실은 "기록 삭제"로 남습니다.</div>`,['삭제','warn'],'doDelLog()')}
+function delLogAll(){const list=LOG.filter(e=>!LOGF||e.admin_name===LOGF);ADMT={ids:list.map(e=>e.id)};admModal('기록 전체 삭제',`<div class="small">${LOGF?'<b>'+esc(LOGF)+'</b>의 ':''}기록 <b>${list.length}건</b>을 모두 삭제할까요? 되돌릴 수 없습니다.</div><div class="small" style="margin-top:6px">삭제한 사실은 "기록 삭제"로 남습니다.</div>`,['전체 삭제','warn'],'doDelLog()')}
+async function doDelLog(){const er=document.getElementById('merr');er.textContent='삭제 중…';const r=await SB.rpc('admin_delete_log',{pw:PW,ids:ADMT.ids});if(r.error){er.textContent='삭제하지 못했습니다.';return}closeModal();toast(r.data+'건 삭제했습니다');LOG=null;render()}
 function rmAdmin(id,n){ADMT={id,n};admModal(`${esc(n)} · 삭제`,`<div class="small">이 관리자 번호를 삭제할까요? 지금까지 남긴 기록은 그대로 남습니다.</div>`,['삭제','warn'],'doRm()')}
 async function doRm(){const er=document.getElementById('merr');er.textContent='삭제 중…';const r=await SB.rpc('admin_remove_admin',{pw:PW,target:ADMT.id});if(r.error){er.textContent='삭제하지 못했습니다.';return}closeModal();toast('삭제했습니다');LOG=null;render()}
 function pickPlayer(p){PSEL=p;PTEAM=team[p];try{localStorage.setItem('bd_player',p)}catch(e){}history.replaceState(null,'','#player/'+encodeURIComponent(p));PHASH=location.hash;render()}
