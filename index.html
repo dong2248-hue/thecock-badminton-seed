@@ -134,28 +134,24 @@ table.tt td.cell.adm:hover{background:#FFF4E6}
 table.pt td{font-size:13px;white-space:nowrap;padding:8px 4px}
 table.pt tr.dh td{background:var(--lt);color:var(--g);font-weight:800;text-align:left;font-size:13px}
 table.pt tr.mv td{background:#FDECEA;color:var(--red);font-weight:800;font-size:12px;text-align:left}
-.htop{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}
-.htop h1{flex:1;min-width:0;padding-top:2px}
-.promo{flex:none;display:flex;flex-direction:column;gap:4px;text-decoration:none;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:4px;width:118px}
-.promo:hover{background:rgba(255,255,255,.18)}
-.pthumb{position:relative;display:block;border-radius:7px;overflow:hidden;aspect-ratio:16/9;background:#123}
+.vids{margin:22px 0 4px}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.promo{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--tx);background:#fff;border:1px solid var(--ln);border-radius:12px;padding:6px}
+.promo:hover{background:var(--lt)}
+.pthumb{position:relative;display:block;border-radius:8px;overflow:hidden;aspect-ratio:16/9;background:#dfe7e2}
 .pthumb img{width:100%;height:100%;object-fit:cover;display:block}
-.play{position:absolute;left:50%;top:50%;width:26px;height:18px;margin:-9px 0 0 -13px;background:#e62117;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,.4)}
-.play::after{content:"";position:absolute;left:10px;top:5px;border-left:8px solid #fff;border-top:4px solid transparent;border-bottom:4px solid transparent}
-.ptxt{display:flex;align-items:center;gap:5px;padding:0 2px 1px}
-.plogo{width:20px;height:20px;border-radius:50%;background:#fff;flex:none}
-.ptxt span{display:flex;flex-direction:column;line-height:1.1;min-width:0}
-.ptxt b{font-size:10.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ptxt small{font-size:9.5px;opacity:.8}
-@media(min-width:700px){.promo{width:150px}}
+.play{position:absolute;left:50%;top:50%;width:30px;height:21px;margin:-10px 0 0 -15px;background:#e62117;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.play::after{content:"";position:absolute;left:12px;top:6px;border-left:8px solid #fff;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent}
+.ptxt{display:flex;align-items:center;gap:6px;padding:0 2px 2px}
+.plogo{width:20px;height:20px;border-radius:50%;background:#fff;border:1px solid var(--ln);flex:none}
+.ptxt b{font-size:12px;font-weight:800;white-space:nowrap}
+.vfoot{display:flex;align-items:center;justify-content:center;gap:8px;margin:18px 0 6px;text-decoration:none;color:var(--g)}
+.vfoot img{width:30px;height:30px;border-radius:50%;border:1px solid var(--ln);background:#fff}
+.vfoot b{font-size:15px;font-weight:800}
 </style></head>
 <body>
 <header>
-  <div class="htop"><h1>소년체전 경기도대표 선발시드 평가전</h1>
-  <a class="promo" href="https://youtu.be/iT9WnaJVWrs" target="_blank" rel="noopener" aria-label="더콕배드민턴 유튜브 영상 보기">
-    <span class="pthumb"><img src="https://i.ytimg.com/vi/iT9WnaJVWrs/mqdefault.jpg" alt="" loading="lazy"><i class="play"></i></span>
-    <span class="ptxt"><img class="plogo" src="https://yt3.ggpht.com/Z3mdUq1H93zCM6ZmkK2HDXcZ4rgcyM7R4joAKnzOH-TYeBQZeiztcycV9Tmg_kYnzYtzenPfrQ=s88-c-k-c0x00ffffff-no-rj" alt="더콕배드민턴"><span><b>더콕배드민턴</b></span></span>
-  </a></div>
+  <h1>소년체전 경기도대표 선발시드 평가전</h1>
   <div class="sub"><span>남자초등부 단식 · 31점 1세트</span><span id="role" class="badge b-view">보기 전용</span><span id="sync"></span><button id="loginBtn" class="hbtn" onclick="adminBtn()">관리자</button></div>
   <nav id="nav">
     <a href="#court" data-v="court">코트 현황</a><a href="#list" data-v="list">타임테이블</a><a href="#player" data-v="player">선수별 시간표</a><a href="#rank" data-v="rank">순위</a><a href="#self" data-v="self">교내 평가전</a><a href="#info" data-v="info">안내</a>
@@ -224,7 +220,12 @@ function progressCard(){
   const segs=[0,1,2].map(s=>{const ms=D.matches.filter(m=>m.seg===s);return [ms.filter(m=>done(m.id)).length,ms.length]});
   const all=D.matches.filter(m=>done(m.id)).length, sf=D.selfm.filter(m=>done(m.id)).length;
   return `<div class="card"><h2>진행 현황</h2>${segs.map((x,i)=>`<div class="small">${SEGN[i]} · 계획 기준 ${x[0]}/${x[1]}</div><div class="prog"><i style="width:${x[1]?x[0]/x[1]*100:0}%"></i></div>`).join('')}
-  <div class="small" style="margin-top:6px">대회 경기 ${all}/362 완료 · 교내 평가전 ${sf}/44 입력</div></div>`;
+  <div class="small" style="margin-top:6px">대회 경기 ${all}/362 완료 · 교내 평가전 ${sf}/44 입력</div></div>`+videoBlock();
+}
+const VIDS=['iT9WnaJVWrs','gLdruGZZXNE','IkUF6XPH1sY','8hqXk7ukspo'], CH_LOGO='https://yt3.ggpht.com/Z3mdUq1H93zCM6ZmkK2HDXcZ4rgcyM7R4joAKnzOH-TYeBQZeiztcycV9Tmg_kYnzYtzenPfrQ=s88-c-k-c0x00ffffff-no-rj';
+function videoBlock(){
+  return `<div class="vids"><div class="vgrid">${VIDS.map(id=>`<a class="promo" href="https://youtu.be/${id}" target="_blank" rel="noopener" aria-label="더콕배드민턴 유튜브 영상 보기"><span class="pthumb"><img src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="" loading="lazy"><i class="play"></i></span><span class="ptxt"><img class="plogo" src="${CH_LOGO}" alt=""><b>더콕배드민턴</b></span></a>`).join('')}</div>
+  <a class="vfoot" href="https://www.youtube.com/@thecock_badminton" target="_blank" rel="noopener"><img src="${CH_LOGO}" alt="더콕배드민턴 로고"><b>더콕배드민턴</b></a></div>`;
 }
 let TQ='';
 const TTS=[{label:'1일차 · 이천중체육관',day:0,gym:0},{label:'2일차 · 이천중체육관',day:1,gym:0},{label:'2일차 · 안흥초체육관',day:1,gym:1}];
