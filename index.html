@@ -134,10 +134,28 @@ table.tt td.cell.adm:hover{background:#FFF4E6}
 table.pt td{font-size:13px;white-space:nowrap;padding:8px 4px}
 table.pt tr.dh td{background:var(--lt);color:var(--g);font-weight:800;text-align:left;font-size:13px}
 table.pt tr.mv td{background:#FDECEA;color:var(--red);font-weight:800;font-size:12px;text-align:left}
+.htop{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}
+.htop h1{flex:1;min-width:0;padding-top:2px}
+.promo{flex:none;display:flex;flex-direction:column;gap:4px;text-decoration:none;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:4px;width:118px}
+.promo:hover{background:rgba(255,255,255,.18)}
+.pthumb{position:relative;display:block;border-radius:7px;overflow:hidden;aspect-ratio:16/9;background:#123}
+.pthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.play{position:absolute;left:50%;top:50%;width:26px;height:18px;margin:-9px 0 0 -13px;background:#e62117;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.play::after{content:"";position:absolute;left:10px;top:5px;border-left:8px solid #fff;border-top:4px solid transparent;border-bottom:4px solid transparent}
+.ptxt{display:flex;align-items:center;gap:5px;padding:0 2px 1px}
+.plogo{width:20px;height:20px;border-radius:50%;background:#fff;flex:none}
+.ptxt span{display:flex;flex-direction:column;line-height:1.1;min-width:0}
+.ptxt b{font-size:10.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ptxt small{font-size:9.5px;opacity:.8}
+@media(min-width:700px){.promo{width:150px}}
 </style></head>
 <body>
 <header>
-  <h1>소년체전 경기도대표 선발시드 평가전</h1>
+  <div class="htop"><h1>소년체전 경기도대표 선발시드 평가전</h1>
+  <a class="promo" href="https://youtu.be/iT9WnaJVWrs" target="_blank" rel="noopener" aria-label="더콕배드민턴 유튜브 영상 보기">
+    <span class="pthumb"><img src="https://i.ytimg.com/vi/iT9WnaJVWrs/mqdefault.jpg" alt="" loading="lazy"><i class="play"></i></span>
+    <span class="ptxt"><img class="plogo" src="https://yt3.ggpht.com/Z3mdUq1H93zCM6ZmkK2HDXcZ4rgcyM7R4joAKnzOH-TYeBQZeiztcycV9Tmg_kYnzYtzenPfrQ=s88-c-k-c0x00ffffff-no-rj" alt="더콕배드민턴"><span><b>더콕배드민턴</b><small>유튜브 보기 ›</small></span></span>
+  </a></div>
   <div class="sub"><span>남자초등부 단식 · 31점 1세트</span><span id="role" class="badge b-view">보기 전용</span><span id="sync"></span><button id="loginBtn" class="hbtn" onclick="adminBtn()">관리자</button></div>
   <nav id="nav">
     <a href="#court" data-v="court">코트 현황</a><a href="#list" data-v="list">타임테이블</a><a href="#player" data-v="player">선수별 시간표</a><a href="#rank" data-v="rank">순위</a><a href="#self" data-v="self">교내 평가전</a><a href="#info" data-v="info">안내</a>
