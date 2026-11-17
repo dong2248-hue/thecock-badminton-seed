@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>소년체전 선발시드 평가전 · 경기 운영</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--g:#1F4E3D;--g2:#2E7D4F;--lt:#EEF4F0;--ln:#dfe7e2;--tx:#2b322e;--mu:#6b7c74;--or:#D9822B;--red:#b23a2a;--bg:#f6f8f7}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Sans KR",sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.45;-webkit-text-size-adjust:100%}
+header{background:var(--g);color:#fff;padding:16px 16px 0;position:sticky;top:0;z-index:20}
+header h1{font-size:17px;font-weight:800;letter-spacing:-.3px}
+header .sub{font-size:12px;opacity:.8;margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:700}
+.b-admin{background:#B7D94C;color:var(--g)}.b-view{background:rgba(255,255,255,.18);color:#fff}
+nav{display:flex;gap:2px;margin-top:12px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{color:#cfe0d6;text-decoration:none;font-size:14px;font-weight:700;padding:9px 12px;border-radius:10px 10px 0 0;white-space:nowrap}
+nav a.on{background:var(--bg);color:var(--g)}
+main{max-width:980px;margin:0 auto;padding:14px 12px 80px}
+.note{background:#FFF7E0;border:1px solid #f0dca0;color:#7a5a00;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px}
+.err{background:#FDECEA;border-color:#f3c4bd;color:var(--red)}
+.card{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:12px}
+h2{font-size:16px;font-weight:800;color:var(--g);margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h2 small{font-weight:500;color:var(--mu);font-size:12px}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.seg button,.chip{border:1.5px solid var(--ln);background:#fff;border-radius:20px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;color:var(--mu);cursor:pointer}
+.seg button.on,.chip.on{background:var(--g);border-color:var(--g);color:#fff}
+.gymtitle{font-size:15px;font-weight:800;margin:4px 0 8px;display:flex;align-items:center;gap:8px}
+.gA{background:#DCEBDD;color:#1F5E36}.gB{background:#FCE4CC;color:#9A4F0C}
+.gtag{padding:2px 8px;border-radius:8px;font-size:12px;font-weight:700;white-space:nowrap}
+.btn{white-space:nowrap}
+.courts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.court{border:1.5px solid var(--ln);border-radius:12px;padding:10px 12px;background:#fff;min-height:118px;display:flex;flex-direction:column}
+.court.live{border-color:var(--g2);background:#F3FAF5}
+.court .ch{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--mu);font-weight:700;margin-bottom:6px}
+.court .ch .lv{color:var(--g2)}
+.pl{display:flex;align-items:baseline;gap:5px;font-size:16px;font-weight:700;color:#333}
+.pl .t{font-size:11px;font-weight:700}
+.vs{font-size:11px;color:#9aa8a1;margin:1px 0 1px 2px}
+.btns{display:flex;gap:6px;margin-top:auto;padding-top:8px}
+.btn{border:0;border-radius:9px;padding:8px 10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;background:var(--lt);color:var(--g)}
+.btn.pri{background:var(--g);color:#fff}.btn.warn{background:#FDECEA;color:var(--red)}.btn.full{width:100%}
+.btn:disabled{opacity:.45;cursor:default}
+.empty{color:#a3b0aa;font-size:13px;margin:auto 0;text-align:center}
+.queue{margin-top:10px}
+.qrow{display:flex;align-items:center;gap:8px;padding:8px 2px;border-top:1px solid #eef2f0;font-size:14px}
+.qrow .n{width:22px;height:22px;border-radius:50%;background:var(--lt);color:var(--g);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.qrow .who{flex:1;min-width:0}
+.nm{font-weight:700;color:#333}.tm{font-size:11px;font-weight:700;margin-left:2px}
+.warn-t{font-size:11px;color:var(--or);font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--lt);color:var(--g);font-size:12px;font-weight:800;padding:8px 6px;text-align:center;white-space:nowrap;position:sticky;top:0}
+td{border-bottom:1px solid #eef2f0;padding:8px 6px;text-align:center}
+td.l{text-align:left}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.st{font-size:11px;font-weight:800;padding:2px 7px;border-radius:8px;white-space:nowrap}
+.st-w{background:#eef1f0;color:#7b8a83}.st-l{background:#DCEFE2;color:var(--g2)}.st-d{background:var(--g);color:#fff}
+.win{color:var(--g2);font-weight:800}
+.wl{display:inline-block;font-size:11px;font-weight:800;padding:0 6px;border-radius:7px;margin-left:4px;vertical-align:1px}
+.wl.w{background:#2E7D4F;color:#fff}.wl.l{background:#e9eeec;color:#7b8a83}
+.side{white-space:nowrap}.lose{color:#9aa8a1}
+.rk1{background:#FFF6D6}.rk2{background:#F1F3F4}.rk3{background:#FBE9DA}
+.rk{font-weight:800;color:var(--g)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+input[type=search],select{border:1.5px solid var(--ln);border-radius:10px;padding:8px 10px;font:inherit;font-size:14px;background:#fff}
+input[type=search]{flex:1;min-width:140px}
+.modal{position:fixed;inset:0;background:rgba(20,30,25,.45);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.modal .box{background:#fff;width:100%;max-width:520px;border-radius:18px 18px 0 0;padding:18px 16px 24px;max-height:88vh;overflow:auto}
+@media(min-width:700px){.modal{align-items:center}.modal .box{border-radius:18px}}
+.modal h3{font-size:17px;font-weight:800;color:var(--g);margin-bottom:12px}
+.score{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin:8px 0 14px}
+.score .side{text-align:center}
+.score input{width:100%;font-size:30px;font-weight:800;text-align:center;border:2px solid var(--ln);border-radius:12px;padding:10px 0;font-family:inherit}
+.score .colon{font-size:26px;font-weight:800;color:#9aa8a1}
+.quick{display:flex;gap:6px;justify-content:center;margin-top:6px}
+.quick button{border:1px solid var(--ln);background:#fff;border-radius:8px;padding:4px 8px;font-size:12px;font-weight:700;color:var(--g);cursor:pointer}
+.mrow{display:flex;gap:8px;margin-top:6px}
+.mrow .btn{flex:1;padding:12px}
+.small{font-size:12px;color:var(--mu)}
+.prog{height:8px;background:#e6ece9;border-radius:6px;overflow:hidden;margin:6px 0 2px}
+.prog i{display:block;height:100%;background:var(--g2)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;font-weight:700;margin-top:6px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#233;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:60;opacity:0;transition:.25s;pointer-events:none}
+.toast.on{opacity:1}
+.pick{border:1px solid var(--ln);border-radius:10px;padding:10px;margin-bottom:6px;display:flex;align-items:center;gap:10px;cursor:pointer;background:#fff;width:100%;text-align:left;font:inherit}
+.pick:hover{background:var(--lt)}
+.statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.statgrid div{background:var(--lt);border-radius:10px;padding:8px;text-align:center}
+.statgrid b{display:block;font-size:20px;color:var(--g)}
+.statgrid span{font-size:11px;color:var(--mu)}
+.lunch{background:#FDECEA;color:var(--red);border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;margin-bottom:12px}
+
+.tt-card{padding:12px 8px}
+.ttwrap{margin:0 -4px}
+table.tt{border-collapse:separate;border-spacing:0;font-size:12px;min-width:100%}
+table.tt th{position:sticky;top:0;z-index:2}
+table.tt th.tcol{left:0;z-index:3;background:var(--lt);min-width:46px}
+table.tt tr th.tcol{position:sticky;left:0}
+table.tt td{border:0;border-bottom:1px solid #eef2f0;border-right:1px solid #f1f4f2;padding:4px 5px;text-align:left;vertical-align:top;min-width:84px}
+table.tt td.e{background:#fafbfa}
+table.tt td.cell{cursor:default}
+table.tt td.cell.fin{background:#F7FBF8}
+table.tt td.cell.live{background:#E8F5EC;box-shadow:inset 0 0 0 2px #2E7D4F}
+table.tt td.cell.hit{background:#FFF4D6;box-shadow:inset 0 0 0 2px #E0B341}
+table.tt td.cell.dim{opacity:.35}
+table.tt .ln{display:flex;align-items:baseline;gap:3px;white-space:nowrap;line-height:1.35}
+table.tt .ln .nm{font-size:13px;font-weight:700;color:#3a3f3c}
+table.tt .ln .tm{font-size:10px}
+table.tt .ln .sc{margin-left:auto;font-size:13px;padding-left:6px}
+table.tt .ln.wn .nm,table.tt .ln.wn .sc{color:#1F6B3F}
+table.tt .ln.wn .nm::after{content:"승";font-size:9px;background:#2E7D4F;color:#fff;border-radius:5px;padding:0 4px;margin-left:3px;vertical-align:1px}
+table.tt .ln.ls .nm,table.tt .ln.ls .sc{color:#9aa8a1}
+table.tt .lvt{font-size:10px;color:var(--g2);font-weight:800}
+table.tt tr.lu td{background:#FDECEA;color:var(--red);font-weight:800;font-size:12px;text-align:center;padding:7px}
+.hbtn{margin-left:auto;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:8px;padding:3px 10px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.pwin{width:100%;font-size:18px;padding:12px;border:2px solid var(--ln);border-radius:12px;font-family:inherit;margin:6px 0 4px}
+.no{display:inline-block;min-width:26px;padding:0 5px;border-radius:7px;background:#1F4E3D;color:#fff;font-size:11px;font-weight:800;text-align:center;margin-right:4px;vertical-align:1px}
+.no.dn{background:#c9d3ce}
+table.tt .cno{font-size:10px;font-weight:800;color:#7b8a83;margin-bottom:1px}
+table.tt td.cell.adm{cursor:pointer}
+table.tt .edit{display:inline-block;margin-top:3px;font-size:10px;font-weight:800;color:#fff;background:#D9822B;border-radius:6px;padding:1px 6px}
+table.tt .edit.re{background:#e9eeec;color:#5d6b64}
+table.tt td.cell.adm:hover{background:#FFF4E6}
+.adminbar{background:#FFF1E0;border:1.5px solid #F2C38F;color:#8a4b0c;border-radius:10px;padding:8px 10px;font-size:13px;font-weight:700;margin-bottom:8px}
+.pk{display:flex;align-items:center;gap:8px;border:1px solid var(--ln);border-radius:10px;padding:9px 10px;margin-bottom:5px;background:#fff;width:100%;text-align:left;font:inherit;cursor:pointer}
+.pk:hover{background:var(--lt)}.pk:disabled{cursor:default;background:#f6f8f7;opacity:.6}
+.pk .why{font-size:11px;font-weight:700;color:var(--mu);white-space:nowrap}
+.pk.rec{border-color:#2E7D4F;box-shadow:inset 0 0 0 1px #2E7D4F}
+.daytitle{font-size:15px;font-weight:800;color:var(--g);margin:14px 2px 8px}
+.pcard .ph{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.pcard .ph b{font-size:20px}
+.pteams{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.pnames{display:flex;gap:6px;flex-wrap:wrap}
+table.pt td{font-size:13px;white-space:nowrap;padding:8px 4px}
+table.pt tr.dh td{background:var(--lt);color:var(--g);font-weight:800;text-align:left;font-size:13px}
+table.pt tr.mv td{background:#FDECEA;color:var(--red);font-weight:800;font-size:12px;text-align:left}
+</style></head>
+<body>
+<header>
+  <h1>소년체전 경기도대표 선발시드 평가전</h1>
+  <div class="sub"><span>남자초등부(5학년) 단식 · 31점 1세트</span><span id="role" class="badge b-view">보기 전용</span><span id="sync"></span><button id="loginBtn" class="hbtn" onclick="adminBtn()">관리자</button></div>
+  <nav id="nav">
+    <a href="#court" data-v="court">코트 현황</a><a href="#list" data-v="list">타임테이블</a><a href="#player" data-v="player">선수별 시간표</a><a href="#rank" data-v="rank">순위</a><a href="#self" data-v="self">교내 평가전</a><a href="#info" data-v="info">안내</a>
+  </nav>
+</header>
+<main id="app"></main>
+<div id="modal"></div>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script id="data" type="application/json">{"teams": [{"name": "중부초", "short": "중부", "color": "#2E7D4F", "players": ["최정우", "이채훈", "배예준", "고건후", "전현우", "호준우"], "loc": [0, 0, 0]}, {"name": "원동초", "short": "원동", "color": "#1F6FB2", "players": ["김도진", "전병건", "김민재", "양준호"], "loc": [0, 0, 0]}, {"name": "김포G스포츠", "short": "김포G", "color": "#7B4FA0", "players": ["박준하"], "loc": [0, 0, 0]}, {"name": "안흥초", "short": "안흥", "color": "#D9822B", "players": ["정기현", "조하랑", "유리한", "황서준", "유홍재"], "loc": [0, 0, 1]}, {"name": "태장초", "short": "태장", "color": "#795548", "players": ["박재현", "이준희", "안시윤", "장예준"], "loc": [0, 1, 0]}, {"name": "연서초", "short": "연서", "color": "#0E8C8C", "players": ["양희웅", "최유건", "김성훈"], "loc": [0, 1, 1]}, {"name": "남양주G스포츠", "short": "남양주G", "color": "#827717", "players": ["한예준", "김민준", "신예하"], "loc": [0, 1, 1]}, {"name": "하남G스포츠", "short": "하남G", "color": "#B5487A", "players": ["심재아", "이시안"], "loc": [0, 1, 1]}, {"name": "의정부G스포츠", "short": "의정부G", "color": "#4A5A6A", "players": ["이담후"], "loc": [0, 1, 1]}], "matches": [{"a": "심재아", "b": "박준하", "seg": 0, "gym": 0, "slot": 0, "court": 1, "time": "09:00", "id": "n001"}, {"a": "양준호", "b": "양희웅", "seg": 0, "gym": 0, "slot": 0, "court": 2, "time": "09:00", "id": "n002"}, {"a": "고건후", "b": "이담후", "seg": 0, "gym": 0, "slot": 0, "court": 3, "time": "09:00", "id": "n003"}, {"a": "전병건", "b": "김민준", "seg": 0, "gym": 0, "slot": 0, "court": 4, "time": "09:00", "id": "n004"}, {"a": "전현우", "b": "김성훈", "seg": 0, "gym": 0, "slot": 0, "court": 5, "time": "09:00", "id": "n005"}, {"a": "이채훈", "b": "한예준", "seg": 0, "gym": 0, "slot": 0, "court": 6, "time": "09:00", "id": "n006"}, {"a": "호준우", "b": "이시안", "seg": 0, "gym": 0, "slot": 1, "court": 1, "time": "09:20", "id": "n007"}, {"a": "배예준", "b": "신예하", "seg": 0, "gym": 0, "slot": 1, "court": 2, "time": "09:20", "id": "n008"}, {"a": "김도진", "b": "최유건", "seg": 0, "gym": 0, "slot": 1, "court": 3, "time": "09:20", "id": "n009"}, {"a": "조하랑", "b": "장예준", "seg": 0, "gym": 0, "slot": 1, "court": 4, "time": "09:20", "id": "n010"}, {"a": "황서준", "b": "박재현", "seg": 0, "gym": 0, "slot": 1, "court": 5, "time": "09:20", "id": "n011"}, {"a": "유홍재", "b": "이준희", "seg": 0, "gym": 0, "slot": 1, "court": 6, "time": "09:20", "id": "n012"}, {"a": "한예준", "b": "박준하", "seg": 0, "gym": 0, "slot": 2, "court": 1, "time": "09:40", "id": "n013"}, {"a": "전병건", "b": "심재아", "seg": 0, "gym": 0, "slot": 2, "court": 2, "time": "09:40", "id": "n014"}, {"a": "이채훈", "b": "이담후", "seg": 0, "gym": 0, "slot": 2, "court": 3, "time": "09:40", "id": "n015"}, {"a": "전현우", "b": "양희웅", "seg": 0, "gym": 0, "slot": 2, "court": 4, "time": "09:40", "id": "n016"}, {"a": "김민재", "b": "김민준", "seg": 0, "gym": 0, "slot": 2, "court": 5, "time": "09:40", "id": "n017"}, {"a": "고건후", "b": "정기현", "seg": 0, "gym": 0, "slot": 2, "court": 6, "time": "09:40", "id": "n018"}, {"a": "양준호", "b": "김성훈", "seg": 0, "gym": 0, "slot": 3, "court": 1, "time": "10:00", "id": "n019"}, {"a": "호준우", "b": "신예하", "seg": 0, "gym": 0, "slot": 3, "court": 2, "time": "10:00", "id": "n020"}, {"a": "박재현", "b": "이시안", "seg": 0, "gym": 0, "slot": 3, "court": 3, "time": "10:00", "id": "n021"}, {"a": "최정우", "b": "최유건", "seg": 0, "gym": 0, "slot": 3, "court": 4, "time": "10:00", "id": "n022"}, {"a": "유리한", "b": "이준희", "seg": 0, "gym": 0, "slot": 3, "court": 5, "time": "10:00", "id": "n023"}, {"a": "조하랑", "b": "안시윤", "seg": 0, "gym": 0, "slot": 3, "court": 6, "time": "10:00", "id": "n024"}, {"a": "전병건", "b": "한예준", "seg": 0, "gym": 0, "slot": 4, "court": 1, "time": "10:20", "id": "n025"}, {"a": "박준하", "b": "이담후", "seg": 0, "gym": 0, "slot": 4, "court": 2, "time": "10:20", "id": "n026"}, {"a": "김도진", "b": "양희웅", "seg": 0, "gym": 0, "slot": 4, "court": 3, "time": "10:20", "id": "n027"}, {"a": "고건후", "b": "심재아", "seg": 0, "gym": 0, "slot": 4, "court": 4, "time": "10:20", "id": "n028"}, {"a": "배예준", "b": "김민준", "seg": 0, "gym": 0, "slot": 4, "court": 5, "time": "10:20", "id": "n029"}, {"a": "전현우", "b": "정기현", "seg": 0, "gym": 0, "slot": 4, "court": 6, "time": "10:20", "id": "n030"}, {"a": "최정우", "b": "이시안", "seg": 0, "gym": 0, "slot": 5, "court": 1, "time": "10:40", "id": "n031"}, {"a": "양준호", "b": "안시윤", "seg": 0, "gym": 0, "slot": 5, "court": 2, "time": "10:40", "id": "n032"}, {"a": "유리한", "b": "신예하", "seg": 0, "gym": 0, "slot": 5, "court": 3, "time": "10:40", "id": "n033"}, {"a": "호준우", "b": "김성훈", "seg": 0, "gym": 0, "slot": 5, "court": 4, "time": "10:40", "id": "n034"}, {"a": "이채훈", "b": "최유건", "seg": 0, "gym": 0, "slot": 5, "court": 5, "time": "10:40", "id": "n035"}, {"a": "유홍재", "b": "김민재", "seg": 0, "gym": 0, "slot": 5, "court": 6, "time": "10:40", "id": "n036"}, {"a": "양희웅", "b": "박준하", "seg": 0, "gym": 0, "slot": 6, "court": 1, "time": "11:00", "id": "n037"}, {"a": "황서준", "b": "한예준", "seg": 0, "gym": 0, "slot": 6, "court": 2, "time": "11:00", "id": "n038"}, {"a": "김도진", "b": "김민준", "seg": 0, "gym": 0, "slot": 6, "court": 3, "time": "11:00", "id": "n039"}, {"a": "전병건", "b": "이담후", "seg": 0, "gym": 0, "slot": 6, "court": 4, "time": "11:00", "id": "n040"}, {"a": "장예준", "b": "심재아", "seg": 0, "gym": 0, "slot": 6, "court": 5, "time": "11:00", "id": "n041"}, {"a": "전현우", "b": "조하랑", "seg": 0, "gym": 0, "slot": 6, "court": 6, "time": "11:00", "id": "n042"}, {"a": "고건후", "b": "신예하", "seg": 0, "gym": 0, "slot": 7, "court": 1, "time": "11:20", "id": "n043"}, {"a": "양준호", "b": "이시안", "seg": 0, "gym": 0, "slot": 7, "court": 2, "time": "11:20", "id": "n044"}, {"a": "유리한", "b": "김성훈", "seg": 0, "gym": 0, "slot": 7, "court": 3, "time": "11:20", "id": "n045"}, {"a": "정기현", "b": "안시윤", "seg": 0, "gym": 0, "slot": 7, "court": 4, "time": "11:20", "id": "n046"}, {"a": "최정우", "b": "이준희", "seg": 0, "gym": 0, "slot": 7, "court": 5, "time": "11:20", "id": "n047"}, {"a": "배예준", "b": "최유건", "seg": 0, "gym": 0, "slot": 7, "court": 6, "time": "11:20", "id": "n048"}, {"a": "전병건", "b": "양희웅", "seg": 0, "gym": 0, "slot": 8, "court": 1, "time": "11:40", "id": "n049"}, {"a": "김민재", "b": "이담후", "seg": 0, "gym": 0, "slot": 8, "court": 2, "time": "11:40", "id": "n050"}, {"a": "전현우", "b": "김민준", "seg": 0, "gym": 0, "slot": 8, "court": 3, "time": "11:40", "id": "n051"}, {"a": "장예준", "b": "한예준", "seg": 0, "gym": 0, "slot": 8, "court": 4, "time": "11:40", "id": "n052"}, {"a": "김도진", "b": "심재아", "seg": 0, "gym": 0, "slot": 8, "court": 5, "time": "11:40", "id": "n053"}, {"a": "이채훈", "b": "황서준", "seg": 0, "gym": 0, "slot": 8, "court": 6, "time": "11:40", "id": "n054"}, {"a": "이시안", "b": "박준하", "seg": 0, "gym": 0, "slot": 9, "court": 1, "time": "12:00", "id": "n055"}, {"a": "유홍재", "b": "양준호", "seg": 0, "gym": 0, "slot": 9, "court": 2, "time": "12:00", "id": "n056"}, {"a": "고건후", "b": "조하랑", "seg": 0, "gym": 0, "slot": 9, "court": 3, "time": "12:00", "id": "n057"}, {"a": "배예준", "b": "김성훈", "seg": 0, "gym": 0, "slot": 9, "court": 4, "time": "12:00", "id": "n058"}, {"a": "유리한", "b": "박재현", "seg": 0, "gym": 0, "slot": 9, "court": 5, "time": "12:00", "id": "n059"}, {"a": "최정우", "b": "신예하", "seg": 0, "gym": 0, "slot": 9, "court": 6, "time": "12:00", "id": "n060"}, {"a": "호준우", "b": "김민준", "seg": 0, "gym": 0, "slot": 10, "court": 1, "time": "12:20", "id": "n061"}, {"a": "김민재", "b": "심재아", "seg": 0, "gym": 0, "slot": 10, "court": 2, "time": "12:20", "id": "n062"}, {"a": "전병건", "b": "최유건", "seg": 0, "gym": 0, "slot": 10, "court": 3, "time": "12:20", "id": "n063"}, {"a": "정기현", "b": "이담후", "seg": 0, "gym": 0, "slot": 10, "court": 4, "time": "12:20", "id": "n064"}, {"a": "전현우", "b": "한예준", "seg": 0, "gym": 0, "slot": 10, "court": 5, "time": "12:20", "id": "n065"}, {"a": "황서준", "b": "이준희", "seg": 0, "gym": 0, "slot": 10, "court": 6, "time": "12:20", "id": "n066"}, {"a": "고건후", "b": "양희웅", "seg": 0, "gym": 0, "slot": 11, "court": 1, "time": "12:40", "id": "n067"}, {"a": "김성훈", "b": "박준하", "seg": 0, "gym": 0, "slot": 11, "court": 2, "time": "12:40", "id": "n068"}, {"a": "이채훈", "b": "장예준", "seg": 0, "gym": 0, "slot": 11, "court": 3, "time": "12:40", "id": "n069"}, {"a": "김도진", "b": "이시안", "seg": 0, "gym": 0, "slot": 11, "court": 4, "time": "12:40", "id": "n070"}, {"a": "유리한", "b": "양준호", "seg": 0, "gym": 0, "slot": 11, "court": 5, "time": "12:40", "id": "n071"}, {"a": "유홍재", "b": "안시윤", "seg": 0, "gym": 0, "slot": 11, "court": 6, "time": "12:40", "id": "n072"}, {"a": "호준우", "b": "심재아", "seg": 0, "gym": 0, "slot": 12, "court": 1, "time": "13:00", "id": "n073"}, {"a": "전병건", "b": "박재현", "seg": 0, "gym": 0, "slot": 12, "court": 2, "time": "13:00", "id": "n074"}, {"a": "황서준", "b": "김민준", "seg": 0, "gym": 0, "slot": 12, "court": 3, "time": "13:00", "id": "n075"}, {"a": "배예준", "b": "이담후", "seg": 0, "gym": 0, "slot": 12, "court": 4, "time": "13:00", "id": "n076"}, {"a": "김민재", "b": "신예하", "seg": 0, "gym": 0, "slot": 12, "court": 5, "time": "13:00", "id": "n077"}, {"a": "최정우", "b": "한예준", "seg": 0, "gym": 0, "slot": 12, "court": 6, "time": "13:00", "id": "n078"}, {"a": "정기현", "b": "박준하", "seg": 0, "gym": 0, "slot": 13, "court": 1, "time": "13:20", "id": "n079"}, {"a": "유홍재", "b": "양희웅", "seg": 0, "gym": 0, "slot": 13, "court": 2, "time": "13:20", "id": "n080"}, {"a": "조하랑", "b": "이준희", "seg": 0, "gym": 0, "slot": 13, "court": 3, "time": "13:20", "id": "n081"}, {"a": "이채훈", "b": "김성훈", "seg": 0, "gym": 0, "slot": 13, "court": 4, "time": "13:20", "id": "n082"}, {"a": "고건후", "b": "이시안", "seg": 0, "gym": 0, "slot": 13, "court": 5, "time": "13:20", "id": "n083"}, {"a": "유리한", "b": "안시윤", "seg": 0, "gym": 0, "slot": 13, "court": 6, "time": "13:20", "id": "n084"}, {"a": "전현우", "b": "박재현", "seg": 0, "gym": 0, "slot": 14, "court": 1, "time": "13:40", "id": "n085"}, {"a": "양준호", "b": "김민준", "seg": 0, "gym": 0, "slot": 14, "court": 2, "time": "13:40", "id": "n086"}, {"a": "호준우", "b": "장예준", "seg": 0, "gym": 0, "slot": 14, "court": 3, "time": "13:40", "id": "n087"}, {"a": "김도진", "b": "한예준", "seg": 0, "gym": 0, "slot": 14, "court": 4, "time": "13:40", "id": "n088"}, {"a": "전병건", "b": "신예하", "seg": 0, "gym": 0, "slot": 14, "court": 5, "time": "13:40", "id": "n089"}, {"a": "최정우", "b": "심재아", "seg": 0, "gym": 0, "slot": 14, "court": 6, "time": "13:40", "id": "n090"}, {"a": "배예준", "b": "양희웅", "seg": 0, "gym": 0, "slot": 15, "court": 1, "time": "14:00", "id": "n091"}, {"a": "조하랑", "b": "최유건", "seg": 0, "gym": 0, "slot": 15, "court": 2, "time": "14:00", "id": "n092"}, {"a": "황서준", "b": "박준하", "seg": 0, "gym": 0, "slot": 15, "court": 3, "time": "14:00", "id": "n093"}, {"a": "유홍재", "b": "이담후", "seg": 0, "gym": 0, "slot": 15, "court": 4, "time": "14:00", "id": "n094"}, {"a": "김민재", "b": "이시안", "seg": 0, "gym": 0, "slot": 15, "court": 5, "time": "14:00", "id": "n095"}, {"a": "정기현", "b": "이준희", "seg": 0, "gym": 0, "slot": 15, "court": 6, "time": "14:00", "id": "n096"}, {"a": "이채훈", "b": "김민준", "seg": 0, "gym": 0, "slot": 16, "court": 1, "time": "14:20", "id": "n097"}, {"a": "호준우", "b": "한예준", "seg": 0, "gym": 0, "slot": 16, "court": 2, "time": "14:20", "id": "n098"}, {"a": "전현우", "b": "심재아", "seg": 0, "gym": 0, "slot": 16, "court": 3, "time": "14:20", "id": "n099"}, {"a": "고건후", "b": "장예준", "seg": 0, "gym": 0, "slot": 16, "court": 4, "time": "14:20", "id": "n100"}, {"a": "양준호", "b": "신예하", "seg": 0, "gym": 0, "slot": 16, "court": 5, "time": "14:20", "id": "n101"}, {"a": "전병건", "b": "김성훈", "seg": 0, "gym": 0, "slot": 16, "court": 6, "time": "14:20", "id": "n102"}, {"a": "안시윤", "b": "이담후", "seg": 0, "gym": 0, "slot": 17, "court": 1, "time": "14:40", "id": "n103"}, {"a": "최유건", "b": "박준하", "seg": 0, "gym": 0, "slot": 17, "court": 2, "time": "14:40", "id": "n104"}, {"a": "김도진", "b": "박재현", "seg": 0, "gym": 0, "slot": 17, "court": 3, "time": "14:40", "id": "n105"}, {"a": "최정우", "b": "양희웅", "seg": 0, "gym": 0, "slot": 17, "court": 4, "time": "14:40", "id": "n106"}, {"a": "정기현", "b": "김민재", "seg": 0, "gym": 0, "slot": 17, "court": 5, "time": "14:40", "id": "n107"}, {"a": "배예준", "b": "황서준", "seg": 0, "gym": 0, "slot": 17, "court": 6, "time": "14:40", "id": "n108"}, {"a": "이채훈", "b": "심재아", "seg": 0, "gym": 0, "slot": 18, "court": 1, "time": "15:00", "id": "n109"}, {"a": "고건후", "b": "김민준", "seg": 0, "gym": 0, "slot": 18, "court": 2, "time": "15:00", "id": "n110"}, {"a": "전병건", "b": "이시안", "seg": 0, "gym": 0, "slot": 18, "court": 3, "time": "15:00", "id": "n111"}, {"a": "유홍재", "b": "장예준", "seg": 0, "gym": 0, "slot": 18, "court": 4, "time": "15:00", "id": "n112"}, {"a": "조하랑", "b": "신예하", "seg": 0, "gym": 0, "slot": 18, "court": 5, "time": "15:00", "id": "n113"}, {"a": "양준호", "b": "이준희", "seg": 0, "gym": 0, "slot": 18, "court": 6, "time": "15:00", "id": "n114"}, {"a": "전현우", "b": "이담후", "seg": 0, "gym": 0, "slot": 19, "court": 1, "time": "15:20", "id": "n115"}, {"a": "유리한", "b": "박준하", "seg": 0, "gym": 0, "slot": 19, "court": 2, "time": "15:20", "id": "n116"}, {"a": "배예준", "b": "한예준", "seg": 0, "gym": 0, "slot": 19, "court": 3, "time": "15:20", "id": "n117"}, {"a": "박재현", "b": "양희웅", "seg": 0, "gym": 0, "slot": 19, "court": 4, "time": "15:20", "id": "n118"}, {"a": "김도진", "b": "김성훈", "seg": 0, "gym": 0, "slot": 19, "court": 5, "time": "15:20", "id": "n119"}, {"a": "호준우", "b": "최유건", "seg": 0, "gym": 0, "slot": 19, "court": 6, "time": "15:20", "id": "n120"}, {"a": "황서준", "b": "전병건", "seg": 0, "gym": 0, "slot": 20, "court": 1, "time": "15:40", "id": "n121"}, {"a": "이준희", "b": "이시안", "seg": 0, "gym": 0, "slot": 20, "court": 2, "time": "15:40", "id": "n122"}, {"a": "최정우", "b": "정기현", "seg": 0, "gym": 0, "slot": 20, "court": 3, "time": "15:40", "id": "n123"}, {"a": "안시윤", "b": "김민준", "seg": 0, "gym": 0, "slot": 20, "court": 4, "time": "15:40", "id": "n124"}, {"a": "이채훈", "b": "신예하", "seg": 0, "gym": 0, "slot": 20, "court": 5, "time": "15:40", "id": "n125"}, {"a": "조하랑", "b": "심재아", "seg": 0, "gym": 0, "slot": 20, "court": 6, "time": "15:40", "id": "n126"}, {"a": "김민재", "b": "최유건", "seg": 0, "gym": 0, "slot": 21, "court": 1, "time": "16:00", "id": "n127"}, {"a": "김도진", "b": "이담후", "seg": 0, "gym": 0, "slot": 21, "court": 2, "time": "16:00", "id": "n128"}, {"a": "고건후", "b": "한예준", "seg": 0, "gym": 0, "slot": 21, "court": 3, "time": "16:00", "id": "n129"}, {"a": "전현우", "b": "유홍재", "seg": 0, "gym": 0, "slot": 21, "court": 4, "time": "16:00", "id": "n130"}, {"a": "유리한", "b": "장예준", "seg": 0, "gym": 0, "slot": 21, "court": 5, "time": "16:00", "id": "n131"}, {"a": "호준우", "b": "양희웅", "seg": 0, "gym": 0, "slot": 21, "court": 6, "time": "16:00", "id": "n132"}, {"a": "전병건", "b": "안시윤", "seg": 0, "gym": 0, "slot": 22, "court": 1, "time": "16:20", "id": "n133"}, {"a": "김민준", "b": "박준하", "seg": 0, "gym": 0, "slot": 22, "court": 2, "time": "16:20", "id": "n134"}, {"a": "조하랑", "b": "박재현", "seg": 0, "gym": 0, "slot": 22, "court": 3, "time": "16:20", "id": "n135"}, {"a": "최정우", "b": "김성훈", "seg": 0, "gym": 0, "slot": 22, "court": 4, "time": "16:20", "id": "n136"}, {"a": "배예준", "b": "심재아", "seg": 0, "gym": 0, "slot": 22, "court": 5, "time": "16:20", "id": "n137"}, {"a": "이채훈", "b": "이시안", "seg": 0, "gym": 0, "slot": 22, "court": 6, "time": "16:20", "id": "n138"}, {"a": "양준호", "b": "한예준", "seg": 0, "gym": 0, "slot": 23, "court": 1, "time": "16:40", "id": "n139"}, {"a": "황서준", "b": "장예준", "seg": 0, "gym": 0, "slot": 23, "court": 2, "time": "16:40", "id": "n140"}, {"a": "고건후", "b": "최유건", "seg": 0, "gym": 0, "slot": 23, "court": 3, "time": "16:40", "id": "n141"}, {"a": "전현우", "b": "신예하", "seg": 0, "gym": 0, "slot": 23, "court": 4, "time": "16:40", "id": "n142"}, {"a": "호준우", "b": "이담후", "seg": 0, "gym": 0, "slot": 23, "court": 5, "time": "16:40", "id": "n143"}, {"a": "정기현", "b": "김도진", "seg": 0, "gym": 0, "slot": 23, "court": 6, "time": "16:40", "id": "n144"}, {"a": "유홍재", "b": "박재현", "seg": 0, "gym": 0, "slot": 24, "court": 1, "time": "17:00", "id": "n145"}, {"a": "김민재", "b": "양희웅", "seg": 0, "gym": 0, "slot": 24, "court": 2, "time": "17:00", "id": "n146"}, {"a": "안시윤", "b": "박준하", "seg": 0, "gym": 0, "slot": 24, "court": 3, "time": "17:00", "id": "n147"}, {"a": "배예준", "b": "이준희", "seg": 0, "gym": 0, "slot": 24, "court": 4, "time": "17:00", "id": "n148"}, {"a": "이채훈", "b": "유리한", "seg": 0, "gym": 0, "slot": 24, "court": 5, "time": "17:00", "id": "n149"}, {"a": "최정우", "b": "김민준", "seg": 0, "gym": 0, "slot": 24, "court": 6, "time": "17:00", "id": "n150"}, {"a": "양준호", "b": "최유건", "seg": 0, "gym": 0, "slot": 25, "court": 1, "time": "17:20", "id": "n151"}, {"a": "고건후", "b": "김성훈", "seg": 0, "gym": 0, "slot": 25, "court": 2, "time": "17:20", "id": "n152"}, {"a": "전현우", "b": "이시안", "seg": 0, "gym": 0, "slot": 25, "court": 3, "time": "17:20", "id": "n153"}, {"a": "정기현", "b": "장예준", "seg": 0, "gym": 0, "slot": 25, "court": 4, "time": "17:20", "id": "n154"}, {"a": "김도진", "b": "신예하", "seg": 0, "gym": 0, "slot": 25, "court": 5, "time": "17:20", "id": "n155"}, {"a": "황서준", "b": "심재아", "seg": 0, "gym": 0, "slot": 25, "court": 6, "time": "17:20", "id": "n156"}, {"a": "조하랑", "b": "양희웅", "seg": 0, "gym": 0, "slot": 26, "court": 1, "time": "17:40", "id": "n157"}, {"a": "호준우", "b": "안시윤", "seg": 0, "gym": 0, "slot": 26, "court": 2, "time": "17:40", "id": "n158"}, {"a": "유홍재", "b": "전병건", "seg": 0, "gym": 0, "slot": 26, "court": 3, "time": "17:40", "id": "n159"}, {"a": "김민재", "b": "한예준", "seg": 0, "gym": 0, "slot": 26, "court": 4, "time": "17:40", "id": "n160"}, {"a": "이준희", "b": "박준하", "seg": 0, "gym": 0, "slot": 26, "court": 5, "time": "17:40", "id": "n161"}, {"a": "박재현", "b": "김민준", "seg": 0, "gym": 0, "slot": 26, "court": 6, "time": "17:40", "id": "n162"}, {"a": "최정우", "b": "이담후", "seg": 0, "gym": 0, "slot": 27, "court": 1, "time": "18:00", "id": "n163"}, {"a": "양준호", "b": "심재아", "seg": 0, "gym": 0, "slot": 27, "court": 2, "time": "18:00", "id": "n164"}, {"a": "장예준", "b": "김성훈", "seg": 0, "gym": 0, "slot": 27, "court": 3, "time": "18:00", "id": "n165"}, {"a": "전현우", "b": "최유건", "seg": 0, "gym": 0, "slot": 27, "court": 4, "time": "18:00", "id": "n166"}, {"a": "배예준", "b": "이시안", "seg": 0, "gym": 0, "slot": 27, "court": 5, "time": "18:00", "id": "n167"}, {"a": "고건후", "b": "유리한", "seg": 0, "gym": 0, "slot": 27, "court": 6, "time": "18:00", "id": "n168"}, {"a": "호준우", "b": "조하랑", "seg": 0, "gym": 0, "slot": 28, "court": 1, "time": "18:20", "id": "n169"}, {"a": "전병건", "b": "이준희", "seg": 0, "gym": 0, "slot": 28, "court": 2, "time": "18:20", "id": "n170"}, {"a": "황서준", "b": "안시윤", "seg": 0, "gym": 0, "slot": 28, "court": 3, "time": "18:20", "id": "n171"}, {"a": "정기현", "b": "박재현", "seg": 0, "gym": 0, "slot": 28, "court": 4, "time": "18:20", "id": "n172"}, {"a": "이채훈", "b": "양희웅", "seg": 0, "gym": 0, "slot": 28, "court": 5, "time": "18:20", "id": "n173"}, {"a": "신예하", "b": "박준하", "seg": 0, "gym": 0, "slot": 28, "court": 6, "time": "18:20", "id": "n174"}, {"a": "유리한", "b": "한예준", "seg": 0, "gym": 0, "slot": 29, "court": 1, "time": "18:40", "id": "n175"}, {"a": "김민재", "b": "김성훈", "seg": 0, "gym": 0, "slot": 29, "court": 2, "time": "18:40", "id": "n176"}, {"a": "유홍재", "b": "김도진", "seg": 0, "gym": 0, "slot": 29, "court": 3, "time": "18:40", "id": "n177"}, {"a": "양준호", "b": "이담후", "seg": 0, "gym": 0, "slot": 29, "court": 4, "time": "18:40", "id": "n178"}, {"a": "조하랑", "b": "김민재", "seg": 1, "gym": 0, "slot": 0, "court": 1, "time": "09:00", "id": "n179"}, {"a": "최정우", "b": "유리한", "seg": 1, "gym": 0, "slot": 0, "court": 2, "time": "09:00", "id": "n180"}, {"a": "황서준", "b": "양준호", "seg": 1, "gym": 0, "slot": 0, "court": 3, "time": "09:00", "id": "n181"}, {"a": "배예준", "b": "유홍재", "seg": 1, "gym": 0, "slot": 0, "court": 4, "time": "09:00", "id": "n182"}, {"a": "김도진", "b": "박준하", "seg": 1, "gym": 0, "slot": 0, "court": 5, "time": "09:00", "id": "n183"}, {"a": "이채훈", "b": "정기현", "seg": 1, "gym": 0, "slot": 0, "court": 6, "time": "09:00", "id": "n184"}, {"a": "최유건", "b": "심재아", "seg": 1, "gym": 1, "slot": 0, "court": 1, "time": "09:00", "id": "n185"}, {"a": "이준희", "b": "김성훈", "seg": 1, "gym": 1, "slot": 0, "court": 2, "time": "09:00", "id": "n186"}, {"a": "안시윤", "b": "신예하", "seg": 1, "gym": 1, "slot": 0, "court": 3, "time": "09:00", "id": "n187"}, {"a": "박재현", "b": "이담후", "seg": 1, "gym": 1, "slot": 0, "court": 4, "time": "09:00", "id": "n188"}, {"a": "고건후", "b": "전병건", "seg": 1, "gym": 0, "slot": 1, "court": 1, "time": "09:20", "id": "n189"}, {"a": "황서준", "b": "김민재", "seg": 1, "gym": 0, "slot": 1, "court": 2, "time": "09:20", "id": "n190"}, {"a": "호준우", "b": "유리한", "seg": 1, "gym": 0, "slot": 1, "court": 3, "time": "09:20", "id": "n191"}, {"a": "최정우", "b": "조하랑", "seg": 1, "gym": 0, "slot": 1, "court": 4, "time": "09:20", "id": "n192"}, {"a": "전현우", "b": "양준호", "seg": 1, "gym": 0, "slot": 1, "court": 5, "time": "09:20", "id": "n193"}, {"a": "이채훈", "b": "김도진", "seg": 1, "gym": 0, "slot": 1, "court": 6, "time": "09:20", "id": "n194"}, {"a": "장예준", "b": "양희웅", "seg": 1, "gym": 1, "slot": 1, "court": 1, "time": "09:20", "id": "n195"}, {"a": "최유건", "b": "한예준", "seg": 1, "gym": 1, "slot": 1, "court": 2, "time": "09:20", "id": "n196"}, {"a": "안시윤", "b": "이시안", "seg": 1, "gym": 1, "slot": 1, "court": 3, "time": "09:20", "id": "n197"}, {"a": "이준희", "b": "심재아", "seg": 1, "gym": 1, "slot": 1, "court": 4, "time": "09:20", "id": "n198"}, {"a": "유홍재", "b": "박준하", "seg": 1, "gym": 0, "slot": 2, "court": 1, "time": "09:40", "id": "n199"}, {"a": "배예준", "b": "정기현", "seg": 1, "gym": 0, "slot": 2, "court": 2, "time": "09:40", "id": "n200"}, {"a": "박재현", "b": "신예하", "seg": 1, "gym": 1, "slot": 2, "court": 1, "time": "09:40", "id": "n201"}, {"a": "김민준", "b": "이담후", "seg": 1, "gym": 1, "slot": 2, "court": 2, "time": "09:40", "id": "n202"}, {"a": "김성훈", "b": "이시안", "seg": 1, "gym": 1, "slot": 2, "court": 3, "time": "09:40", "id": "n203"}, {"a": "최정우", "b": "김민재", "seg": 1, "gym": 0, "slot": 3, "court": 1, "time": "10:00", "id": "n204"}, {"a": "조하랑", "b": "양준호", "seg": 1, "gym": 0, "slot": 3, "court": 2, "time": "10:00", "id": "n205"}, {"a": "황서준", "b": "김도진", "seg": 1, "gym": 0, "slot": 3, "court": 3, "time": "10:00", "id": "n206"}, {"a": "유리한", "b": "전병건", "seg": 1, "gym": 0, "slot": 3, "court": 4, "time": "10:00", "id": "n207"}, {"a": "고건후", "b": "박준하", "seg": 1, "gym": 0, "slot": 3, "court": 5, "time": "10:00", "id": "n208"}, {"a": "호준우", "b": "유홍재", "seg": 1, "gym": 0, "slot": 3, "court": 6, "time": "10:00", "id": "n209"}, {"a": "이준희", "b": "최유건", "seg": 1, "gym": 1, "slot": 3, "court": 1, "time": "10:00", "id": "n210"}, {"a": "한예준", "b": "심재아", "seg": 1, "gym": 1, "slot": 3, "court": 2, "time": "10:00", "id": "n211"}, {"a": "안시윤", "b": "양희웅", "seg": 1, "gym": 1, "slot": 3, "court": 3, "time": "10:00", "id": "n212"}, {"a": "장예준", "b": "신예하", "seg": 1, "gym": 1, "slot": 3, "court": 4, "time": "10:00", "id": "n213"}, {"a": "이채훈", "b": "조하랑", "seg": 1, "gym": 0, "slot": 4, "court": 1, "time": "10:20", "id": "n214"}, {"a": "배예준", "b": "김민재", "seg": 1, "gym": 0, "slot": 4, "court": 2, "time": "10:20", "id": "n215"}, {"a": "전현우", "b": "황서준", "seg": 1, "gym": 0, "slot": 4, "court": 3, "time": "10:20", "id": "n216"}, {"a": "정기현", "b": "양준호", "seg": 1, "gym": 0, "slot": 4, "court": 4, "time": "10:20", "id": "n217"}, {"a": "최정우", "b": "김도진", "seg": 1, "gym": 0, "slot": 4, "court": 5, "time": "10:20", "id": "n218"}, {"a": "박재현", "b": "김성훈", "seg": 1, "gym": 1, "slot": 4, "court": 1, "time": "10:20", "id": "n219"}, {"a": "이시안", "b": "이담후", "seg": 1, "gym": 1, "slot": 4, "court": 2, "time": "10:20", "id": "n220"}, {"a": "최유건", "b": "김민준", "seg": 1, "gym": 1, "slot": 4, "court": 3, "time": "10:20", "id": "n221"}, {"a": "이준희", "b": "한예준", "seg": 1, "gym": 1, "slot": 4, "court": 4, "time": "10:20", "id": "n222"}, {"a": "고건후", "b": "유홍재", "seg": 1, "gym": 0, "slot": 5, "court": 1, "time": "10:40", "id": "n223"}, {"a": "전병건", "b": "박준하", "seg": 1, "gym": 0, "slot": 5, "court": 2, "time": "10:40", "id": "n224"}, {"a": "배예준", "b": "유리한", "seg": 1, "gym": 0, "slot": 5, "court": 3, "time": "10:40", "id": "n225"}, {"a": "호준우", "b": "정기현", "seg": 1, "gym": 0, "slot": 5, "court": 4, "time": "10:40", "id": "n226"}, {"a": "안시윤", "b": "심재아", "seg": 1, "gym": 1, "slot": 5, "court": 1, "time": "10:40", "id": "n227"}, {"a": "양희웅", "b": "신예하", "seg": 1, "gym": 1, "slot": 5, "court": 2, "time": "10:40", "id": "n228"}, {"a": "장예준", "b": "이시안", "seg": 1, "gym": 1, "slot": 5, "court": 3, "time": "10:40", "id": "n229"}, {"a": "조하랑", "b": "김도진", "seg": 1, "gym": 0, "slot": 6, "court": 1, "time": "11:00", "id": "n230"}, {"a": "이채훈", "b": "김민재", "seg": 1, "gym": 0, "slot": 6, "court": 2, "time": "11:00", "id": "n231"}, {"a": "최정우", "b": "황서준", "seg": 1, "gym": 0, "slot": 6, "court": 3, "time": "11:00", "id": "n232"}, {"a": "전현우", "b": "유리한", "seg": 1, "gym": 0, "slot": 6, "court": 4, "time": "11:00", "id": "n233"}, {"a": "박재현", "b": "최유건", "seg": 1, "gym": 1, "slot": 6, "court": 1, "time": "11:00", "id": "n234"}, {"a": "김성훈", "b": "한예준", "seg": 1, "gym": 1, "slot": 6, "court": 2, "time": "11:00", "id": "n235"}, {"a": "이준희", "b": "김민준", "seg": 1, "gym": 1, "slot": 6, "court": 3, "time": "11:00", "id": "n236"}, {"a": "장예준", "b": "이담후", "seg": 1, "gym": 1, "slot": 6, "court": 4, "time": "11:00", "id": "n237"}, {"a": "정기현", "b": "전병건", "seg": 1, "gym": 0, "slot": 7, "court": 1, "time": "11:20", "id": "n238"}, {"a": "배예준", "b": "양준호", "seg": 1, "gym": 0, "slot": 7, "court": 2, "time": "11:20", "id": "n239"}, {"a": "조하랑", "b": "박준하", "seg": 1, "gym": 0, "slot": 7, "court": 3, "time": "11:20", "id": "n240"}, {"a": "고건후", "b": "김민재", "seg": 1, "gym": 0, "slot": 7, "court": 4, "time": "11:20", "id": "n241"}, {"a": "최정우", "b": "유홍재", "seg": 1, "gym": 0, "slot": 7, "court": 5, "time": "11:20", "id": "n242"}, {"a": "호준우", "b": "황서준", "seg": 1, "gym": 0, "slot": 7, "court": 6, "time": "11:20", "id": "n243"}, {"a": "신예하", "b": "심재아", "seg": 1, "gym": 1, "slot": 7, "court": 1, "time": "11:20", "id": "n244"}, {"a": "양희웅", "b": "이시안", "seg": 1, "gym": 1, "slot": 7, "court": 2, "time": "11:20", "id": "n245"}, {"a": "안시윤", "b": "최유건", "seg": 1, "gym": 1, "slot": 7, "court": 3, "time": "11:20", "id": "n246"}, {"a": "이준희", "b": "이담후", "seg": 1, "gym": 1, "slot": 7, "court": 4, "time": "11:20", "id": "n247"}, {"a": "유리한", "b": "김도진", "seg": 1, "gym": 0, "slot": 8, "court": 1, "time": "11:40", "id": "n248"}, {"a": "이채훈", "b": "유홍재", "seg": 1, "gym": 0, "slot": 8, "court": 2, "time": "11:40", "id": "n249"}, {"a": "박재현", "b": "한예준", "seg": 1, "gym": 1, "slot": 8, "court": 1, "time": "11:40", "id": "n250"}, {"a": "장예준", "b": "김민준", "seg": 1, "gym": 1, "slot": 8, "court": 2, "time": "11:40", "id": "n251"}, {"a": "김성훈", "b": "신예하", "seg": 1, "gym": 1, "slot": 8, "court": 3, "time": "11:40", "id": "n252"}, {"a": "김민재", "b": "박준하", "seg": 1, "gym": 0, "slot": 9, "court": 1, "time": "12:00", "id": "n253"}, {"a": "조하랑", "b": "전병건", "seg": 1, "gym": 0, "slot": 9, "court": 2, "time": "12:00", "id": "n254"}, {"a": "고건후", "b": "황서준", "seg": 1, "gym": 0, "slot": 9, "court": 3, "time": "12:00", "id": "n255"}, {"a": "최정우", "b": "양준호", "seg": 1, "gym": 0, "slot": 9, "court": 4, "time": "12:00", "id": "n256"}, {"a": "이준희", "b": "양희웅", "seg": 1, "gym": 1, "slot": 9, "court": 1, "time": "12:00", "id": "n257"}, {"a": "심재아", "b": "이담후", "seg": 1, "gym": 1, "slot": 9, "court": 2, "time": "12:00", "id": "n258"}, {"a": "최유건", "b": "이시안", "seg": 1, "gym": 1, "slot": 9, "court": 3, "time": "12:00", "id": "n259"}, {"a": "안시윤", "b": "김성훈", "seg": 1, "gym": 1, "slot": 9, "court": 4, "time": "12:00", "id": "n260"}, {"a": "배예준", "b": "조하랑", "seg": 1, "gym": 0, "slot": 10, "court": 1, "time": "12:20", "id": "n261"}, {"a": "유리한", "b": "김민재", "seg": 1, "gym": 0, "slot": 10, "court": 2, "time": "12:20", "id": "n262"}, {"a": "장예준", "b": "최유건", "seg": 1, "gym": 1, "slot": 10, "court": 1, "time": "12:20", "id": "n263"}, {"a": "이준희", "b": "신예하", "seg": 1, "gym": 1, "slot": 10, "court": 2, "time": "12:20", "id": "n264"}, {"a": "박재현", "b": "심재아", "seg": 1, "gym": 1, "slot": 10, "court": 3, "time": "12:20", "id": "n265"}, {"a": "안시윤", "b": "한예준", "seg": 1, "gym": 1, "slot": 10, "court": 4, "time": "12:20", "id": "n266"}, {"a": "장예준", "b": "박준하", "seg": 2, "gym": 0, "slot": 0, "court": 1, "time": "13:10", "id": "n267"}, {"a": "전현우", "b": "김도진", "seg": 2, "gym": 0, "slot": 0, "court": 2, "time": "13:10", "id": "n268"}, {"a": "배예준", "b": "박재현", "seg": 2, "gym": 0, "slot": 0, "court": 3, "time": "13:10", "id": "n269"}, {"a": "이채훈", "b": "안시윤", "seg": 2, "gym": 0, "slot": 0, "court": 4, "time": "13:10", "id": "n270"}, {"a": "호준우", "b": "김민재", "seg": 2, "gym": 0, "slot": 0, "court": 5, "time": "13:10", "id": "n271"}, {"a": "고건후", "b": "이준희", "seg": 2, "gym": 0, "slot": 0, "court": 6, "time": "13:10", "id": "n272"}, {"a": "정기현", "b": "이시안", "seg": 2, "gym": 1, "slot": 0, "court": 1, "time": "13:10", "id": "n273"}, {"a": "김성훈", "b": "김민준", "seg": 2, "gym": 1, "slot": 0, "court": 2, "time": "13:10", "id": "n274"}, {"a": "양희웅", "b": "이담후", "seg": 2, "gym": 1, "slot": 0, "court": 3, "time": "13:10", "id": "n275"}, {"a": "유홍재", "b": "신예하", "seg": 2, "gym": 1, "slot": 0, "court": 4, "time": "13:10", "id": "n276"}, {"a": "최정우", "b": "전병건", "seg": 2, "gym": 0, "slot": 1, "court": 1, "time": "13:30", "id": "n277"}, {"a": "양준호", "b": "박준하", "seg": 2, "gym": 0, "slot": 1, "court": 2, "time": "13:30", "id": "n278"}, {"a": "호준우", "b": "박재현", "seg": 2, "gym": 0, "slot": 1, "court": 3, "time": "13:30", "id": "n279"}, {"a": "김민재", "b": "장예준", "seg": 2, "gym": 0, "slot": 1, "court": 4, "time": "13:30", "id": "n280"}, {"a": "전현우", "b": "안시윤", "seg": 2, "gym": 0, "slot": 1, "court": 5, "time": "13:30", "id": "n281"}, {"a": "배예준", "b": "김도진", "seg": 2, "gym": 0, "slot": 1, "court": 6, "time": "13:30", "id": "n282"}, {"a": "유리한", "b": "최유건", "seg": 2, "gym": 1, "slot": 1, "court": 1, "time": "13:30", "id": "n283"}, {"a": "조하랑", "b": "한예준", "seg": 2, "gym": 1, "slot": 1, "court": 2, "time": "13:30", "id": "n284"}, {"a": "황서준", "b": "이담후", "seg": 2, "gym": 1, "slot": 1, "court": 3, "time": "13:30", "id": "n285"}, {"a": "김민준", "b": "심재아", "seg": 2, "gym": 1, "slot": 1, "court": 4, "time": "13:30", "id": "n286"}, {"a": "이채훈", "b": "이준희", "seg": 2, "gym": 0, "slot": 2, "court": 1, "time": "13:50", "id": "n287"}, {"a": "고건후", "b": "양준호", "seg": 2, "gym": 0, "slot": 2, "court": 2, "time": "13:50", "id": "n288"}, {"a": "정기현", "b": "양희웅", "seg": 2, "gym": 1, "slot": 2, "court": 1, "time": "13:50", "id": "n289"}, {"a": "신예하", "b": "이시안", "seg": 2, "gym": 1, "slot": 2, "court": 2, "time": "13:50", "id": "n290"}, {"a": "유홍재", "b": "김성훈", "seg": 2, "gym": 1, "slot": 2, "court": 3, "time": "13:50", "id": "n291"}, {"a": "황서준", "b": "최유건", "seg": 2, "gym": 1, "slot": 2, "court": 4, "time": "13:50", "id": "n292"}, {"a": "박재현", "b": "박준하", "seg": 2, "gym": 0, "slot": 3, "court": 1, "time": "14:10", "id": "n293"}, {"a": "김도진", "b": "장예준", "seg": 2, "gym": 0, "slot": 3, "court": 2, "time": "14:10", "id": "n294"}, {"a": "호준우", "b": "전병건", "seg": 2, "gym": 0, "slot": 3, "court": 3, "time": "14:10", "id": "n295"}, {"a": "전현우", "b": "김민재", "seg": 2, "gym": 0, "slot": 3, "court": 4, "time": "14:10", "id": "n296"}, {"a": "최정우", "b": "안시윤", "seg": 2, "gym": 0, "slot": 3, "court": 5, "time": "14:10", "id": "n297"}, {"a": "유리한", "b": "김민준", "seg": 2, "gym": 1, "slot": 3, "court": 1, "time": "14:10", "id": "n298"}, {"a": "한예준", "b": "이담후", "seg": 2, "gym": 1, "slot": 3, "court": 2, "time": "14:10", "id": "n299"}, {"a": "유홍재", "b": "심재아", "seg": 2, "gym": 1, "slot": 3, "court": 3, "time": "14:10", "id": "n300"}, {"a": "조하랑", "b": "이시안", "seg": 2, "gym": 1, "slot": 3, "court": 4, "time": "14:10", "id": "n301"}, {"a": "이채훈", "b": "양준호", "seg": 2, "gym": 0, "slot": 4, "court": 1, "time": "14:30", "id": "n302"}, {"a": "배예준", "b": "전병건", "seg": 2, "gym": 0, "slot": 4, "court": 2, "time": "14:30", "id": "n303"}, {"a": "김도진", "b": "이준희", "seg": 2, "gym": 0, "slot": 4, "court": 3, "time": "14:30", "id": "n304"}, {"a": "고건후", "b": "박재현", "seg": 2, "gym": 0, "slot": 4, "court": 4, "time": "14:30", "id": "n305"}, {"a": "최정우", "b": "장예준", "seg": 2, "gym": 0, "slot": 4, "court": 5, "time": "14:30", "id": "n306"}, {"a": "전현우", "b": "박준하", "seg": 2, "gym": 0, "slot": 4, "court": 6, "time": "14:30", "id": "n307"}, {"a": "정기현", "b": "김성훈", "seg": 2, "gym": 1, "slot": 4, "court": 1, "time": "14:30", "id": "n308"}, {"a": "황서준", "b": "양희웅", "seg": 2, "gym": 1, "slot": 4, "court": 2, "time": "14:30", "id": "n309"}, {"a": "최유건", "b": "신예하", "seg": 2, "gym": 1, "slot": 4, "court": 3, "time": "14:30", "id": "n310"}, {"a": "유리한", "b": "이담후", "seg": 2, "gym": 1, "slot": 4, "court": 4, "time": "14:30", "id": "n311"}, {"a": "김민재", "b": "안시윤", "seg": 2, "gym": 0, "slot": 5, "court": 1, "time": "14:50", "id": "n312"}, {"a": "호준우", "b": "이준희", "seg": 2, "gym": 0, "slot": 5, "court": 2, "time": "14:50", "id": "n313"}, {"a": "김민준", "b": "이시안", "seg": 2, "gym": 1, "slot": 5, "court": 1, "time": "14:50", "id": "n314"}, {"a": "유홍재", "b": "한예준", "seg": 2, "gym": 1, "slot": 5, "court": 2, "time": "14:50", "id": "n315"}, {"a": "정기현", "b": "심재아", "seg": 2, "gym": 1, "slot": 5, "court": 3, "time": "14:50", "id": "n316"}, {"a": "조하랑", "b": "김성훈", "seg": 2, "gym": 1, "slot": 5, "court": 4, "time": "14:50", "id": "n317"}, {"a": "배예준", "b": "장예준", "seg": 2, "gym": 0, "slot": 6, "court": 1, "time": "15:10", "id": "n318"}, {"a": "이채훈", "b": "박준하", "seg": 2, "gym": 0, "slot": 6, "court": 2, "time": "15:10", "id": "n319"}, {"a": "양준호", "b": "박재현", "seg": 2, "gym": 0, "slot": 6, "court": 3, "time": "15:10", "id": "n320"}, {"a": "고건후", "b": "김도진", "seg": 2, "gym": 0, "slot": 6, "court": 4, "time": "15:10", "id": "n321"}, {"a": "전현우", "b": "전병건", "seg": 2, "gym": 0, "slot": 6, "court": 5, "time": "15:10", "id": "n322"}, {"a": "유리한", "b": "양희웅", "seg": 2, "gym": 1, "slot": 6, "court": 1, "time": "15:10", "id": "n323"}, {"a": "신예하", "b": "이담후", "seg": 2, "gym": 1, "slot": 6, "court": 2, "time": "15:10", "id": "n324"}, {"a": "황서준", "b": "이시안", "seg": 2, "gym": 1, "slot": 6, "court": 3, "time": "15:10", "id": "n325"}, {"a": "유홍재", "b": "최유건", "seg": 2, "gym": 1, "slot": 6, "court": 4, "time": "15:10", "id": "n326"}, {"a": "김민재", "b": "이준희", "seg": 2, "gym": 0, "slot": 7, "court": 1, "time": "15:30", "id": "n327"}, {"a": "김도진", "b": "안시윤", "seg": 2, "gym": 0, "slot": 7, "court": 2, "time": "15:30", "id": "n328"}, {"a": "호준우", "b": "박준하", "seg": 2, "gym": 0, "slot": 7, "court": 3, "time": "15:30", "id": "n329"}, {"a": "최정우", "b": "박재현", "seg": 2, "gym": 0, "slot": 7, "court": 4, "time": "15:30", "id": "n330"}, {"a": "양준호", "b": "장예준", "seg": 2, "gym": 0, "slot": 7, "court": 5, "time": "15:30", "id": "n331"}, {"a": "이채훈", "b": "전병건", "seg": 2, "gym": 0, "slot": 7, "court": 6, "time": "15:30", "id": "n332"}, {"a": "정기현", "b": "김민준", "seg": 2, "gym": 1, "slot": 7, "court": 1, "time": "15:30", "id": "n333"}, {"a": "김성훈", "b": "심재아", "seg": 2, "gym": 1, "slot": 7, "court": 2, "time": "15:30", "id": "n334"}, {"a": "양희웅", "b": "한예준", "seg": 2, "gym": 1, "slot": 7, "court": 3, "time": "15:30", "id": "n335"}, {"a": "조하랑", "b": "이담후", "seg": 2, "gym": 1, "slot": 7, "court": 4, "time": "15:30", "id": "n336"}, {"a": "배예준", "b": "안시윤", "seg": 2, "gym": 0, "slot": 8, "court": 1, "time": "15:50", "id": "n337"}, {"a": "전현우", "b": "이준희", "seg": 2, "gym": 0, "slot": 8, "court": 2, "time": "15:50", "id": "n338"}, {"a": "유리한", "b": "이시안", "seg": 2, "gym": 1, "slot": 8, "court": 1, "time": "15:50", "id": "n339"}, {"a": "황서준", "b": "신예하", "seg": 2, "gym": 1, "slot": 8, "court": 2, "time": "15:50", "id": "n340"}, {"a": "정기현", "b": "최유건", "seg": 2, "gym": 1, "slot": 8, "court": 3, "time": "15:50", "id": "n341"}, {"a": "유홍재", "b": "김민준", "seg": 2, "gym": 1, "slot": 8, "court": 4, "time": "15:50", "id": "n342"}, {"a": "호준우", "b": "양준호", "seg": 2, "gym": 0, "slot": 9, "court": 1, "time": "16:10", "id": "n343"}, {"a": "전병건", "b": "장예준", "seg": 2, "gym": 0, "slot": 9, "court": 2, "time": "16:10", "id": "n344"}, {"a": "김민재", "b": "박재현", "seg": 2, "gym": 0, "slot": 9, "court": 3, "time": "16:10", "id": "n345"}, {"a": "최정우", "b": "박준하", "seg": 2, "gym": 0, "slot": 9, "court": 4, "time": "16:10", "id": "n346"}, {"a": "양희웅", "b": "심재아", "seg": 2, "gym": 1, "slot": 9, "court": 1, "time": "16:10", "id": "n347"}, {"a": "김성훈", "b": "이담후", "seg": 2, "gym": 1, "slot": 9, "court": 2, "time": "16:10", "id": "n348"}, {"a": "한예준", "b": "이시안", "seg": 2, "gym": 1, "slot": 9, "court": 3, "time": "16:10", "id": "n349"}, {"a": "고건후", "b": "안시윤", "seg": 2, "gym": 0, "slot": 10, "court": 1, "time": "16:30", "id": "n350"}, {"a": "배예준", "b": "박준하", "seg": 2, "gym": 0, "slot": 10, "court": 2, "time": "16:30", "id": "n351"}, {"a": "호준우", "b": "김도진", "seg": 2, "gym": 0, "slot": 10, "court": 3, "time": "16:30", "id": "n352"}, {"a": "전현우", "b": "장예준", "seg": 2, "gym": 0, "slot": 10, "court": 4, "time": "16:30", "id": "n353"}, {"a": "이채훈", "b": "박재현", "seg": 2, "gym": 0, "slot": 10, "court": 5, "time": "16:30", "id": "n354"}, {"a": "조하랑", "b": "김민준", "seg": 2, "gym": 1, "slot": 10, "court": 1, "time": "16:30", "id": "n355"}, {"a": "정기현", "b": "신예하", "seg": 2, "gym": 1, "slot": 10, "court": 2, "time": "16:30", "id": "n356"}, {"a": "최유건", "b": "이담후", "seg": 2, "gym": 1, "slot": 10, "court": 3, "time": "16:30", "id": "n357"}, {"a": "황서준", "b": "김성훈", "seg": 2, "gym": 1, "slot": 10, "court": 4, "time": "16:30", "id": "n358"}, {"a": "유리한", "b": "심재아", "seg": 2, "gym": 1, "slot": 11, "court": 1, "time": "16:50", "id": "n359"}, {"a": "유홍재", "b": "이시안", "seg": 2, "gym": 1, "slot": 11, "court": 2, "time": "16:50", "id": "n360"}, {"a": "정기현", "b": "한예준", "seg": 2, "gym": 1, "slot": 11, "court": 3, "time": "16:50", "id": "n361"}, {"a": "양희웅", "b": "김민준", "seg": 2, "gym": 1, "slot": 11, "court": 4, "time": "16:50", "id": "n362"}], "selfm": [{"id": "s01", "a": "최정우", "b": "이채훈", "self": true}, {"id": "s02", "a": "최정우", "b": "배예준", "self": true}, {"id": "s03", "a": "최정우", "b": "고건후", "self": true}, {"id": "s04", "a": "최정우", "b": "전현우", "self": true}, {"id": "s05", "a": "최정우", "b": "호준우", "self": true}, {"id": "s06", "a": "이채훈", "b": "배예준", "self": true}, {"id": "s07", "a": "이채훈", "b": "고건후", "self": true}, {"id": "s08", "a": "이채훈", "b": "전현우", "self": true}, {"id": "s09", "a": "이채훈", "b": "호준우", "self": true}, {"id": "s10", "a": "배예준", "b": "고건후", "self": true}, {"id": "s11", "a": "배예준", "b": "전현우", "self": true}, {"id": "s12", "a": "배예준", "b": "호준우", "self": true}, {"id": "s13", "a": "고건후", "b": "전현우", "self": true}, {"id": "s14", "a": "고건후", "b": "호준우", "self": true}, {"id": "s15", "a": "전현우", "b": "호준우", "self": true}, {"id": "s16", "a": "김도진", "b": "전병건", "self": true}, {"id": "s17", "a": "김도진", "b": "김민재", "self": true}, {"id": "s18", "a": "김도진", "b": "양준호", "self": true}, {"id": "s19", "a": "전병건", "b": "김민재", "self": true}, {"id": "s20", "a": "전병건", "b": "양준호", "self": true}, {"id": "s21", "a": "김민재", "b": "양준호", "self": true}, {"id": "s22", "a": "정기현", "b": "조하랑", "self": true}, {"id": "s23", "a": "정기현", "b": "유리한", "self": true}, {"id": "s24", "a": "정기현", "b": "황서준", "self": true}, {"id": "s25", "a": "정기현", "b": "유홍재", "self": true}, {"id": "s26", "a": "조하랑", "b": "유리한", "self": true}, {"id": "s27", "a": "조하랑", "b": "황서준", "self": true}, {"id": "s28", "a": "조하랑", "b": "유홍재", "self": true}, {"id": "s29", "a": "유리한", "b": "황서준", "self": true}, {"id": "s30", "a": "유리한", "b": "유홍재", "self": true}, {"id": "s31", "a": "황서준", "b": "유홍재", "self": true}, {"id": "s32", "a": "박재현", "b": "이준희", "self": true}, {"id": "s33", "a": "박재현", "b": "안시윤", "self": true}, {"id": "s34", "a": "박재현", "b": "장예준", "self": true}, {"id": "s35", "a": "이준희", "b": "안시윤", "self": true}, {"id": "s36", "a": "이준희", "b": "장예준", "self": true}, {"id": "s37", "a": "안시윤", "b": "장예준", "self": true}, {"id": "s38", "a": "양희웅", "b": "최유건", "self": true}, {"id": "s39", "a": "양희웅", "b": "김성훈", "self": true}, {"id": "s40", "a": "최유건", "b": "김성훈", "self": true}, {"id": "s41", "a": "한예준", "b": "김민준", "self": true}, {"id": "s42", "a": "한예준", "b": "신예하", "self": true}, {"id": "s43", "a": "김민준", "b": "신예하", "self": true}, {"id": "s44", "a": "심재아", "b": "이시안", "self": true}], "lunch": "13:10"}</script>
+<script>
+const D=JSON.parse(document.getElementById('data').textContent);
+const GYM=['이천중체육관','안흥초체육관'], GYMC=['gA','gB'], COURTS=[6,4];
+const SEGN=['1일차 · 11/21(토)','2일차 오전 · 11/22(일)','2일차 오후 · 11/22(일)'];
+const team={},T={};D.teams.forEach(t=>{T[t.name]=t;t.players.forEach(p=>team[p]=t.name)});
+const ALL=D.matches.concat(D.selfm); const byId={};ALL.forEach(m=>byId[m.id]=m);
+const PLAYERS=D.teams.flatMap(t=>t.players);
+const DAYN=['1일차 · 11/21(토)','2일차 · 11/22(일)'];
+const dayOf=seg=>seg===0?0:1;
+const NO={};[0,1].forEach(d=>[0,1].forEach(g=>{D.matches.filter(m=>dayOf(m.seg)===d&&m.gym===g).sort((x,y)=>x.seg-y.seg||x.time.localeCompare(y.time)||x.court-y.court).forEach((m,i)=>NO[m.id]=i+1)}));
+const noTag=(m,dn)=>m.self?'':`<span class="no${dn?' dn':''}">${NO[m.id]}</span>`;
+let R={}; let CFG={seg:0,rest:20}; let ADMIN=false,LIVE=false,loadTimer=null,syncNote='';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nm=p=>`<span class="nm">${esc(p)}</span><span class="tm" style="color:${T[team[p]].color}">${T[team[p]].short}</span>`;
+const loc=(p,seg)=>T[team[p]].loc[seg];
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1800)}
+function stat(id){return R[id]||null}
+function done(id){const r=R[id];return r&&r.st==='done'&&Number.isFinite(r.sa)&&Number.isFinite(r.sb)}
+function liveList(){return ALL.filter(m=>R[m.id]&&R[m.id].st==='live')}
+function busySet(){const s=new Set();liveList().forEach(m=>{s.add(m.a);s.add(m.b)});return s}
+function lastEnd(p){let t=0;for(const m of ALL){if((m.a===p||m.b===p)&&done(m.id)&&R[m.id].end>t)t=R[m.id].end}return t}
+function minsSince(t){return Math.floor((Date.now()-t)/60000)}
+function candidates(gym,seg){
+  const busy=busySet(),now=Date.now(),rest=(CFG.rest||0)*60000;
+  return D.matches.filter(m=>!R[m.id] && loc(m.a,seg)===gym && loc(m.b,seg)===gym && !busy.has(m.a)&&!busy.has(m.b))
+   .map(m=>{const la=lastEnd(m.a),lb=lastEnd(m.b);const tired=[];if(la&&now-la<rest)tired.push(m.a);if(lb&&now-lb<rest)tired.push(m.b);return {m,tired}})
+   .sort((x,y)=>(x.tired.length-y.tired.length)||((x.m.seg!==seg)-(y.m.seg!==seg))||(x.m.seg-y.m.seg)||(x.m.slot-y.m.slot)||(x.m.gym===gym?0:1)-(y.m.gym===gym?0:1)||(x.m.court-y.m.court));
+}
+// ---------- views
+let TT=null;
+const segFor=day=>day===0?0:(CFG.seg>=1?CFG.seg:1);
+function vCourt(){
+  const ti=TT??(CFG.seg===0?0:1), t=TTS[ti], day=t.day, g=t.gym, seg=segFor(day); let h='';
+  h+=`<div class="seg">${TTS.map((x,i)=>`<button class="${i===ti?'on':''}" onclick="TT=${i};render()">${x.label}</button>`).join('')}</div>`;
+  if(day===1) h+=`<div class="lunch">2일차 점심·이동 ${lunchTxt()} · ${g===0?'안흥초 팀 → 안흥초체육관으로 이동 · 태장초 팀 합류':'태장초 팀 → 이천중체육관으로 이동 · 안흥초 팀 합류'}${ADMIN?` <span style="font-weight:500">· 지금 <b>${seg===1?'오전':'오후'}</b> 기준 추천</span> <button class="btn" style="padding:3px 8px;font-size:12px" onclick="setSeg(${seg===1?2:1})">${seg===1?'오후로 전환':'오전으로 전환'}</button>`:''}</div>`;
+  const lv=liveList().filter(m=>R[m.id].gym===g);
+  const byC={};lv.forEach(m=>byC[R[m.id].court]=m);
+  const planned=D.matches.filter(m=>dayOf(m.seg)===day&&m.gym===g), pd=planned.filter(m=>done(m.id)).length;
+  h+=`<div class="card"><div class="gymtitle"><span class="gtag ${GYMC[g]}">${t.label}</span><span class="small">${day===0?'11/21(토)':'11/22(일)'} · ${COURTS[g]}코트 · 진행 ${lv.length} · 완료 ${pd}/${planned.length}</span></div><div class="courts">`;
+  for(let c=1;c<=COURTS[g];c++){
+    const m=byC[c];
+    if(m){const r=R[m.id];h+=`<div class="court live"><div class="ch"><span>${c}코트 ${noTag(m)}</span><span class="lv">● 진행 ${minsSince(r.start)}분</span></div>
+      <div class="pl">${nm(m.a)}</div><div class="vs">vs</div><div class="pl">${nm(m.b)}</div>
+      ${ADMIN?`<div class="btns"><button class="btn pri" style="flex:1" onclick="openScore('${m.id}')">결과 입력</button><button class="btn warn" onclick="cancelLive('${m.id}')">취소</button></div>`:''}</div>`}
+    else{h+=`<div class="court"><div class="ch"><span>${c}코트</span><span>비어 있음</span></div><div class="empty">${ADMIN?'':'다음 경기 준비 중'}</div>
+      ${ADMIN?`<div class="btns"><button class="btn pri full" onclick="openPick(${g},${c},${day})">다음 경기 배정</button></div>`:''}</div>`}
+  }
+  h+=`</div>`;
+  const q=candidates(g,seg).filter(x=>dayOf(x.m.seg)===day).slice(0,6);
+  h+=`<div class="queue"><div class="small" style="margin:10px 0 2px;font-weight:700">다음 순서 (준비해 주세요)</div>${q.length?q.map((x,i)=>`<div class="qrow"><span class="n">${i+1}</span><span class="who">${noTag(x.m)}${nm(x.m.a)} <span class="small">vs</span> ${nm(x.m.b)}${x.tired.length?`<div class="warn-t">휴식 중: ${x.tired.map(esc).join(', ')}</div>`:''}</span></div>`).join(''):'<div class="small" style="padding:8px 2px">남은 경기가 없습니다.</div>'}</div></div>`;
+  h+=progressCard();
+  return h;
+}
+function lunchTxt(){const p=D.lunch.split(':').map(Number);const m=p[0]*60+p[1]-30;return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}–${D.lunch}`}
+function progressCard(){
+  const segs=[0,1,2].map(s=>{const ms=D.matches.filter(m=>m.seg===s);return [ms.filter(m=>done(m.id)).length,ms.length]});
+  const all=D.matches.filter(m=>done(m.id)).length, sf=D.selfm.filter(m=>done(m.id)).length;
+  return `<div class="card"><h2>진행 현황</h2>${segs.map((x,i)=>`<div class="small">${SEGN[i]} · 계획 기준 ${x[0]}/${x[1]}</div><div class="prog"><i style="width:${x[1]?x[0]/x[1]*100:0}%"></i></div>`).join('')}
+  <div class="small" style="margin-top:6px">대회 경기 ${all}/362 완료 · 교내 평가전 ${sf}/44 입력</div></div>`;
+}
+let TQ='';
+const TTS=[{label:'1일차 · 이천중체육관',day:0,gym:0},{label:'2일차 · 이천중체육관',day:1,gym:0},{label:'2일차 · 안흥초체육관',day:1,gym:1}];
+function vList(){
+  const ti=TT??(CFG.seg===0?0:1), t=TTS[ti], segs=t.day===0?[0]:[1,2];
+  let h=`<div class="seg">${TTS.map((x,i)=>`<button class="${i===ti?'on':''}" onclick="TT=${i};render()">${x.label}</button>`).join('')}</div>`;
+  const ms=D.matches.filter(m=>segs.includes(m.seg)&&m.gym===t.gym);
+  const doneN=ms.filter(m=>done(m.id)).length;
+  h+=`<div class="card tt-card"><h2><span class="gtag ${GYMC[t.gym]}">${GYM[t.gym]}</span> ${t.day===0?'11/21(토)':'11/22(일)'} <small>${COURTS[t.gym]}코트 · ${ms.length}경기 · 완료 ${doneN}</small></h2>
+  <div class="filters"><input type="search" placeholder="선수 이름으로 찾기 (해당 경기 강조)" value="${esc(TQ)}" oninput="TQ=this.value;renderKeep()"></div>
+  ${ADMIN?'<div class="adminbar">✎ 관리자 모드 · 주황색 <b>점수 입력</b> 표시가 있는 칸을 누르면 점수를 넣을 수 있어요. 입력한 칸은 <b>수정</b>으로 바뀝니다.</div>':''}
+  <div class="scroll ttwrap"><table class="tt"><tr><th class="tcol">시각</th>${Array.from({length:COURTS[t.gym]},(_,i)=>`<th>${i+1}코트</th>`).join('')}</tr>`;
+  for(const seg of segs){
+    if(seg===2) h+=`<tr class="lu"><td colspan="${COURTS[t.gym]+1}">점심·이동 ${lunchTxt()} · ${t.gym===0?'안흥초 팀 → 안흥초체육관으로 이동 · 태장초 팀 합류':'태장초 팀 → 이천중체육관으로 이동 · 안흥초 팀 합류'}</td></tr>`;
+    const times=[...new Set(D.matches.filter(m=>m.seg===seg).map(m=>m.time))].sort();
+    for(const tm of times){
+      h+=`<tr><th class="tcol">${tm}</th>`;
+      for(let c=1;c<=COURTS[t.gym];c++){
+        const m=ms.find(x=>x.seg===seg&&x.time===tm&&x.court===c);
+        if(!m){h+='<td class="e"></td>';continue}
+        const r=R[m.id], hit=TQ.trim()&&(m.a.includes(TQ.trim())||m.b.includes(TQ.trim()));
+        const dim=TQ.trim()&&!hit;
+        let cls='cell'+(ADMIN?' adm':'')+(hit?' hit':'')+(dim?' dim':'')+(r&&r.st==='live'?' live':'')+(done(m.id)?' fin':'');
+        const line=(p,sc,w)=>`<div class="ln${w===true?' wn':w===false?' ls':''}"><span class="nm">${esc(p)}</span><span class="tm" style="color:${T[team[p]].color}">${T[team[p]].short}</span>${sc!==null?`<b class="sc">${sc}</b>`:''}</div>`;
+        let inner;
+        if(done(m.id)){const aw=r.sa>r.sb;inner=line(m.a,r.sa,aw)+line(m.b,r.sb,!aw)}
+        else inner=line(m.a,null)+line(m.b,null)+(r&&r.st==='live'?`<div class="lvt">● 진행${r.gym!==m.gym||r.court!==m.court?` (${GYM[r.gym].slice(0,3)} ${r.court}코트)`:''}</div>`:'');
+        inner=`<div class="cno">${NO[m.id]}번</div>`+inner+(ADMIN?(done(m.id)?'<span class="edit re">✎ 수정</span>':'<span class="edit">✎ 점수 입력</span>'):'');
+        h+=`<td class="${cls}" ${ADMIN?`onclick="openScore('${m.id}')"`:''}>${inner}</td>`;
+      }
+      h+='</tr>';
+    }
+  }
+  h+=`</table></div><div class="legend">${D.teams.map(x=>`<span style="color:${x.color}">■ ${x.short}</span>`).join('')}</div>
+  <div class="small" style="margin-top:6px">계획 시각·코트 기준 표입니다. 실제 진행 순서는 코트 현황에서 바꿀 수 있어요.</div></div>`;
+  return h;
+}
+let PSEL=null,PTEAM=null,PHASH=null,PINIT=false;
+function vPlayer(){
+  if(location.hash!==PHASH){PHASH=location.hash;let hp='';try{hp=decodeURIComponent(location.hash.split('/')[1]||'')}catch(e){}
+    if(hp&&team[hp]){PSEL=hp;PTEAM=team[hp]}}
+  if(!PINIT){PINIT=true;if(!PSEL){try{const x=localStorage.getItem('bd_player');if(x&&team[x]){PSEL=x;PTEAM=team[x]}}catch(e){}}}
+  let h=`<div class="card"><h2>선수별 시간표 <small>학교 → 이름을 누르면 그 선수의 모든 경기 시간·체육관이 나와요</small></h2>
+  <div class="pteams">${D.teams.map(t=>`<button class="chip ${PTEAM===t.name?'on':''}" onclick="PTEAM='${t.name}';render()">${t.name}</button>`).join('')}</div>`;
+  if(PTEAM) h+=`<div class="pnames">${T[PTEAM].players.map(p=>`<button class="chip ${PSEL===p?'on':''}" style="${PSEL===p?'':`color:${T[PTEAM].color};border-color:${T[PTEAM].color}55`}" onclick="pickPlayer('${p}')">${esc(p)}</button>`).join('')}</div>`;
+  h+=`</div>`;
+  if(!PSEL) return h+`<div class="small" style="padding:4px">학교를 먼저 고른 뒤 선수 이름을 눌러 주세요.</div>`;
+  const p=PSEL,t=T[team[p]];
+  const ms=D.matches.filter(m=>m.a===p||m.b===p).sort((x,y)=>x.seg-y.seg||x.time.localeCompare(y.time));
+  const c=[0,1].map(d=>ms.filter(m=>dayOf(m.seg)===d).length), dn=ms.filter(m=>done(m.id)).length;
+  const live=ms.find(m=>R[m.id]&&R[m.id].st==='live');
+  h+=`<div class="card pcard"><div class="ph"><b>${esc(p)}</b><span class="gtag" style="background:${t.color}22;color:${t.color}">${t.name}</span><button class="btn" style="margin-left:auto" onclick="copyPlayer()">이 선수 링크 복사</button></div>
+  <div class="statgrid"><div><b>${ms.length}</b><span>대회 경기</span></div><div><b>${c[0]}</b><span>1일차</span></div><div><b>${c[1]}</b><span>2일차</span></div><div><b>${dn}</b><span>완료</span></div></div>
+  ${live?`<div class="adminbar" style="background:#E8F5EC;border-color:#9fd0ae;color:#1F6B3F">● 지금 경기 중 · ${GYM[R[live.id].gym]} ${R[live.id].court}코트 · 상대 ${esc(live.a===p?live.b:live.a)}</div>`:''}
+  <div class="small" style="margin-bottom:8px">체육관: 1일차 <b>${GYM[t.loc[0]]}</b> · 2일차 오전 <b>${GYM[t.loc[1]]}</b> · 2일차 오후 <b>${GYM[t.loc[2]]}</b></div>
+  <div class="scroll"><table class="pt"><tr><th>번호</th><th>시각</th><th>체육관·코트</th><th class="l">상대</th><th>결과</th></tr>`;
+  for(const d of [0,1]){
+    h+=`<tr class="dh"><td colspan="5">${DAYN[d]} · ${c[d]}경기</td></tr>`;
+    let lunchDone=false;
+    for(const m of ms.filter(m=>dayOf(m.seg)===d)){
+      if(m.seg===2&&!lunchDone){lunchDone=true;h+=`<tr class="mv"><td colspan="5">점심 ${lunchTxt()}${t.loc[1]!==t.loc[2]?` · ${GYM[t.loc[1]]} → <u>${GYM[t.loc[2]]}</u>로 이동`:' · 같은 체육관에서 계속'}</td></tr>`}
+      const o=m.a===p?m.b:m.a,r=R[m.id];let res='<span class="st st-w">예정</span>';
+      if(done(m.id)){const my=m.a===p?r.sa:r.sb,op=m.a===p?r.sb:r.sa;res=`<b class="${my>op?'win':'lose'}">${my}:${op}</b>${wl(my>op)}`}
+      else if(r&&r.st==='live')res='<span class="st st-l">진행 중</span>';
+      h+=`<tr><td>${noTag(m,done(m.id))}</td><td><b>${m.time}</b></td><td><span class="gtag ${GYMC[m.gym]}">${GYM[m.gym].replace('체육관','')}</span> ${m.court}코트</td><td class="l">${nm(o)}</td><td>${res}</td></tr>`;
+    }
+  }
+  const sm=D.selfm.filter(m=>m.a===p||m.b===p);
+  h+=`</table></div><div class="small" style="margin-top:8px">· 번호는 그날 그 체육관의 경기 번호예요(코트 현황·타임테이블과 같은 번호).<br>· 시각은 계획 기준이라 실제 진행에 따라 조금 당겨지거나 늦어질 수 있어요.${sm.length?`<br>· 교내 평가전 ${sm.length}경기(같은 학교끼리)는 따로 진행하고 결과만 순위에 반영해요.`:''}</div></div>`;
+  return h;
+}
+function pickPlayer(p){PSEL=p;PTEAM=team[p];try{localStorage.setItem('bd_player',p)}catch(e){}history.replaceState(null,'','#player/'+encodeURIComponent(p));PHASH=location.hash;render()}
+function copyPlayer(){const u=location.origin+location.pathname+'#player/'+encodeURIComponent(PSEL);
+  (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>toast('링크를 복사했어요. 카톡에 붙여넣기 하세요')).catch(()=>prompt('이 주소를 복사하세요',u))}
+function wl(w){return w?'<span class="wl w">승</span>':'<span class="wl l">패</span>'}
+function scoreLine(m){if(!done(m.id))return `${nm(m.a)} <span class="small">vs</span> ${nm(m.b)}`;const r=R[m.id];const aw=r.sa>r.sb;
+  return `<span class="side">${nm(m.a)}${wl(aw)}</span> <span class="small">vs</span> <span class="side">${nm(m.b)}${wl(!aw)}</span>`}
+let INC_SELF=true;
+function standings(){
+  const S={};PLAYERS.forEach(p=>S[p]={p,g:0,w:0,l:0,f:0,a:0});
+  for(const m of (INC_SELF?ALL:D.matches)){if(!done(m.id))continue;const r=R[m.id];const A=S[m.a],B=S[m.b];
+    A.g++;B.g++;A.f+=r.sa;A.a+=r.sb;B.f+=r.sb;B.a+=r.sa;if(r.sa>r.sb){A.w++;B.l++}else{B.w++;A.l++}}
+  const arr=Object.values(S);arr.forEach(s=>s.d=s.f-s.a);
+  arr.sort((x,y)=>y.w-x.w||y.d-x.d||y.f-x.f||x.p.localeCompare(y.p,'ko'));
+  let rank=0,prev=null;arr.forEach((s,i)=>{const k=s.w+'|'+s.d+'|'+s.f;if(k!==prev){rank=i+1;prev=k}s.r=s.g?rank:null});return arr;
+}
+function vRank(){
+  const st=standings();const tot=INC_SELF?28:null;
+  let h=`<div class="card"><h2>순위표 <small>승수 → 득실차 → 득점 순 · 자동 계산</small></h2>
+  <div class="seg"><button class="${INC_SELF?'on':''}" onclick="INC_SELF=true;render()">교내 평가전 포함 (1인 28경기)</button><button class="${INC_SELF?'':'on'}" onclick="INC_SELF=false;render()">대회 경기만</button></div>
+  <div class="scroll"><table><tr><th>순위</th><th class="l">선수</th><th>경기</th><th>승</th><th>패</th><th>득</th><th>실</th><th>득실</th></tr>`;
+  st.forEach(s=>{const total=INC_SELF?28:29-T[team[s.p]].players.length;
+    h+=`<tr class="${s.r===1?'rk1':s.r===2?'rk2':s.r===3?'rk3':''}"><td class="rk">${s.r??'-'}</td><td class="l">${nm(s.p)}</td><td class="small">${s.g}/${total}</td><td><b>${s.w}</b></td><td>${s.l}</td><td>${s.f}</td><td>${s.a}</td><td>${s.d>0?'+':''}${s.d}</td></tr>`});
+  return h+`</table></div><div class="small" style="margin-top:8px">경기 수가 아직 다르면 순위가 계속 바뀝니다. 모든 경기가 끝나면 확정됩니다.</div></div>`;
+}
+function vSelf(){
+  let h=`<div class="card"><h2>교내 평가전 결과 <small>같은 학교끼리 자체적으로 치른 경기 · 순위표에 포함</small></h2>`;
+  for(const t of D.teams){const ms=D.selfm.filter(m=>team[m.a]===t.name);if(!ms.length)continue;
+    h+=`<div class="gymtitle" style="margin-top:10px"><span class="gtag" style="background:${t.color}22;color:${t.color}">${t.name}</span><span class="small">${ms.filter(m=>done(m.id)).length}/${ms.length} 입력</span></div><table>`;
+    ms.forEach(m=>{h+=`<tr><td class="l">${scoreLine(m)}</td><td>${done(m.id)?`<b>${R[m.id].sa}:${R[m.id].sb}</b>`:'<span class="st st-w">미입력</span>'}</td>${ADMIN?`<td><button class="btn" onclick="openScore('${m.id}')">${done(m.id)?'수정':'입력'}</button></td>`:''}</tr>`});
+    h+=`</table>`}
+  return h+`</div>`;
+}
+function vInfo(){
+  const rows=D.teams.map(t=>`<tr><td class="l"><span class="nm">${t.name}</span> <span class="small">${t.players.length}명</span></td>${t.loc.map(g=>`<td><span class="gtag ${GYMC[g]}">${GYM[g].replace('체육관','')}</span></td>`).join('')}</tr>`).join('');
+  let h=`<div class="card"><h2>체육관 배정</h2><div class="scroll"><table><tr><th class="l">팀</th><th>1일차</th><th>2일차 오전</th><th>2일차 오후</th></tr>${rows}</table></div>
+  <div class="lunch" style="margin-top:10px">2일차 점심·이동 ${lunchTxt()}<br>안흥초 팀: 이천중체육관 → 안흥초체육관<br>태장초 팀: 안흥초체육관 → 이천중체육관</div>
+  <div class="small">· 같은 학교끼리는 대회 경기가 없고, 교내 평가전 결과를 따로 입력해 순위에 반영합니다.<br>· 경기당 약 20분 · 코트가 비면 운영진이 다음 경기를 배정합니다.<br>· 바로 전에 경기를 마친 선수는 휴식 시간(${CFG.rest}분)이 지난 뒤 배정되도록 추천합니다.</div>
+  <div class="legend">${D.teams.map(t=>`<span style="color:${t.color}">■ ${t.short}</span>`).join('')}</div></div>`;
+  if(ADMIN) h+=`<div class="card"><h2>운영 설정 <small>관리자만 보임</small></h2><div class="filters"><span class="small" style="font-weight:700">최소 휴식(분)</span>
+    ${[0,10,20,30].map(v=>`<button class="chip ${CFG.rest===v?'on':''}" onclick="setRest(${v})">${v}</button>`).join('')}</div>
+    <div class="small">추천 목록에서 휴식이 덜 끝난 선수의 경기를 뒤로 보냅니다. 필요하면 직접 골라 배정할 수 있습니다.</div></div>`;
+  return h;
+}
+// ---------- actions
+async function write(id,data){
+  if(!SB||!PW){toast('관리자 로그인이 필요합니다');return false}
+  try{
+    let r;
+    if(data===null) r=await SB.rpc('admin_delete_result',{pw:PW,mid:id});
+    else r=await SB.rpc('admin_save_result',{pw:PW,mid:id,st:data.st,gym:data.gym??null,court:data.court??null,start_at:data.start??null,end_at:data.end??null,sa:data.sa??null,sb:data.sb??null});
+    if(r.error){ if(/password/.test(r.error.message)){logout();toast('비밀번호가 바뀌었거나 틀렸습니다. 다시 로그인해 주세요')} else toast('저장 실패, 다시 시도해 주세요'); return false}
+    if(data===null) delete R[id]; else R[id]=Object.assign({},data); render(); return true;
+  }catch(e){toast('네트워크 오류, 다시 시도해 주세요');return false}
+}
+async function saveCfg(){ if(!ADMIN)return; render(); const r=await SB.rpc('admin_set_config',{pw:PW,seg:CFG.seg,rest:CFG.rest}); if(r.error)toast('저장 실패') }
+async function setSeg(i){if(!ADMIN)return;CFG.seg=i;saveCfg()}
+async function setRest(v){if(!ADMIN)return;CFG.rest=v;saveCfg()}
+function closeModal(){document.getElementById('modal').innerHTML=''}
+function openPick(g,c,day){
+  if(day==null)day=dayOf(CFG.seg); const seg=segFor(day), busy=busySet();
+  const rec=candidates(g,seg).filter(x=>x.m.gym===g&&dayOf(x.m.seg)===day).slice(0,3).map(x=>x.m.id);
+  const tiredOf={};candidates(g,seg).forEach(x=>tiredOf[x.m.id]=x.tired);
+  const ms=D.matches.filter(m=>dayOf(m.seg)===day&&m.gym===g).sort((x,y)=>NO[x.id]-NO[y.id]);
+  let first=null;
+  const list=ms.map(m=>{const r=R[m.id];let why='',ok=false;
+    if(done(m.id))why=`완료 ${r.sa}:${r.sb}`;
+    else if(r&&r.st==='live')why=`진행 중 ${GYM[r.gym].slice(0,3)} ${r.court}코트`;
+    else if(busy.has(m.a)||busy.has(m.b))why='선수 경기 중';
+    else if(loc(m.a,seg)!==g||loc(m.b,seg)!==g)why=m.seg>seg?'오후 경기 (이동 후)':'선수가 다른 체육관';
+    else {ok=true;why=(m.seg===seg?'계획 ':'')+m.time}
+    if(ok&&!first)first=m.id;
+    const tr=ok&&tiredOf[m.id]&&tiredOf[m.id].length?`<div class="warn-t">휴식 중: ${tiredOf[m.id].map(esc).join(', ')}</div>`:'';
+    return `<button id="pk_${m.id}" class="pk${rec.includes(m.id)?' rec':''}" ${ok?`onclick="startMatch('${m.id}',${g},${c},${day})"`:'disabled'}>${noTag(m,!ok)}<div style="flex:1;min-width:0">${nm(m.a)} <span class="small">vs</span> ${nm(m.b)}${tr}</div><span class="why">${rec.includes(m.id)?'<b style="color:#2E7D4F">추천</b> · ':''}${why}</span></button>`}).join('');
+  const n=ms.length, dn=ms.filter(m=>done(m.id)).length;
+  document.getElementById('modal').innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="box"><h3>${DAYN[day].split(' · ')[0]} · ${GYM[g]} ${c}코트 · 다음 경기</h3>
+  <div class="small" style="margin-bottom:8px">${DAYN[day]} ${GYM[g]} 전체 <b>${n}경기</b> (1~${n}번) · 완료 ${dn} · 초록 테두리가 추천이에요. 회색은 지금 배정할 수 없는 경기예요.</div>
+  <div class="mrow" style="margin:0 0 8px"><button class="btn" onclick="document.getElementById('pk_${first}')?.scrollIntoView({block:'center'})">다음 대기 경기로 이동</button><button class="btn" onclick="closeModal()">닫기</button></div>
+  ${list||'<div class="small">배정할 수 있는 경기가 없습니다.</div>'}
+  <div class="mrow"><button class="btn" onclick="closeModal()">닫기</button></div></div></div>`;
+  setTimeout(()=>{const e=document.getElementById('pk_'+(rec[0]||first));e&&e.scrollIntoView({block:'center'})},30);
+}
+async function startMatch(id,g,c,day){
+  if(day!=null&&dayOf(CFG.seg)!==day){CFG.seg=day===0?0:1;saveCfg()}
+  const busy=busySet(),m=byId[id];if(busy.has(m.a)||busy.has(m.b)){toast('이미 경기 중인 선수가 있습니다');return}
+  if(liveList().some(x=>R[x.id].gym===g&&R[x.id].court===c)){toast('이 코트는 이미 진행 중입니다');return}
+  closeModal(); if(await write(id,{st:'live',gym:g,court:c,start:Date.now()})) toast(`${c}코트 배정 완료`);
+}
+async function cancelLive(id){ if(await write(id,null)) toast('배정을 취소했습니다') }
+function openScore(id){
+  const m=byId[id],r=R[id]||{};const sa=done(id)?r.sa:'',sb=done(id)?r.sb:'';
+  document.getElementById('modal').innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="box"><h3>${m.self?'교내 평가전':'경기'} 결과 입력</h3>
+  <div class="score"><div class="side"><div class="pl" style="justify-content:center">${nm(m.a)}</div><input id="sa" type="number" inputmode="numeric" min="0" max="99" value="${sa}"><div class="quick"><button onclick="q31('sa')">31점</button></div></div>
+  <div class="colon">:</div><div class="side"><div class="pl" style="justify-content:center">${nm(m.b)}</div><input id="sb" type="number" inputmode="numeric" min="0" max="99" value="${sb}"><div class="quick"><button onclick="q31('sb')">31점</button></div></div></div>
+  <div id="serr" class="small" style="color:#b23a2a;min-height:18px"></div>
+  <div class="mrow"><button class="btn" onclick="closeModal()">취소</button>${done(id)?`<button class="btn warn" onclick="clearRes('${id}')">결과 삭제</button>`:''}<button class="btn pri" onclick="saveScore('${id}')">저장</button></div></div></div>`;
+  setTimeout(()=>{const e=document.getElementById(sa===''?'sa':'sb');e&&e.focus()},50);
+}
+function q31(k){document.getElementById(k).value=31}
+async function saveScore(id){
+  const a=parseInt(document.getElementById('sa').value,10),b=parseInt(document.getElementById('sb').value,10),er=document.getElementById('serr');
+  if(!Number.isFinite(a)||!Number.isFinite(b)||a<0||b<0){er.textContent='두 선수 점수를 모두 입력해 주세요.';return}
+  if(a===b){er.textContent='동점은 입력할 수 없습니다.';return}
+  const m=byId[id],r=R[id]||{};
+  const data={st:'done',sa:a,sb:b,end:r.end&&r.st==='done'?r.end:Date.now()};
+  if(r.gym!=null)data.gym=r.gym; if(r.court!=null)data.court=r.court; if(r.start)data.start=r.start;
+  if(!m.self&&data.gym==null)data.gym=m.gym;
+  closeModal(); if(await write(id,data)) toast('저장했습니다');
+}
+async function clearRes(id){closeModal(); if(await write(id,null)) toast('결과를 삭제했습니다')}
+// ---------- render
+let VIEW='court';
+function render(){
+  VIEW=(location.hash||'#court').slice(1).split('/')[0]; if(!['court','list','player','rank','self','info'].includes(VIEW))VIEW='court';
+  document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===VIEW));
+  let h='';
+  if(!LIVE) h+=`<div class="note ${syncNote?'err':''}">${syncNote||'결과를 불러오는 중입니다…'}</div>`;
+  h+=({court:vCourt,list:vList,player:vPlayer,rank:vRank,self:vSelf,info:vInfo})[VIEW]();
+  document.getElementById('app').innerHTML=h;
+}
+function renderKeep(){const a=document.activeElement,pos=a&&a.selectionStart;render();if(a&&a.type==='search'){const n=document.querySelector('input[type=search]');n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}}}
+window.addEventListener('hashchange',render);
+setInterval(()=>{if(VIEW==='court'&&!document.getElementById('modal').innerHTML)render()},30000);
+render();
+const SB_URL='https://kfqylcraxzkldxsgafgd.supabase.co', SB_KEY='sb_publishable_zb1v2mOSuowDwNn5hnYh0w_dBNkijbz';
+let SB=null, PW=null;
+function setRole(){const role=document.getElementById('role');role.textContent=ADMIN?'관리자':'보기 전용';role.className='badge '+(ADMIN?'b-admin':'b-view');document.getElementById('loginBtn').textContent=ADMIN?'로그아웃':'관리자';}
+function logout(){PW=null;ADMIN=false;try{localStorage.removeItem('bd_pw')}catch(e){}setRole();render()}
+function adminBtn(){ if(ADMIN){logout();toast('로그아웃했습니다');return}
+  document.getElementById('modal').innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="box"><h3>관리자 로그인</h3>
+  <div class="small">경기 배정과 점수 입력은 관리자 비밀번호가 있어야 합니다.</div><input id="pwin" class="pwin" type="password" autocomplete="current-password" placeholder="비밀번호" onkeydown="if(event.key==='Enter')tryLogin()">
+  <div id="pwerr" class="small" style="color:#b23a2a;min-height:18px"></div><div class="mrow"><button class="btn" onclick="closeModal()">취소</button><button class="btn pri" onclick="tryLogin()">로그인</button></div></div></div>`;
+  setTimeout(()=>document.getElementById('pwin').focus(),50)}
+async function tryLogin(){const v=document.getElementById('pwin').value;if(!v)return;const e=document.getElementById('pwerr');e.textContent='확인 중…';
+  const ok=await checkPw(v); if(ok){PW=v;ADMIN=true;try{localStorage.setItem('bd_pw',v)}catch(x){}closeModal();setRole();render();toast('관리자 모드')}else e.textContent='비밀번호가 맞지 않습니다.'}
+async function checkPw(v){try{const r=await SB.rpc('check_pw',{pw:v});return !r.error&&r.data===true}catch(e){return false}}
+let refT=null;
+async function loadAll(){
+  try{
+    const [a,c]=await Promise.all([SB.from('results').select('id,st,gym,court,start_at,end_at,sa,sb'),SB.from('config').select('seg,rest').eq('k','main').maybeSingle()]);
+    if(a.error)throw a.error;
+    const n={};(a.data||[]).forEach(x=>{if(byId[x.id])n[x.id]={st:x.st,gym:x.gym,court:x.court,start:x.start_at==null?null:Number(x.start_at),end:x.end_at==null?null:Number(x.end_at),sa:x.sa,sb:x.sb}});
+    R=n; if(c.data){CFG={seg:[0,1,2].includes(c.data.seg)?c.data.seg:0,rest:Number.isFinite(c.data.rest)?c.data.rest:20}}
+    LIVE=true;syncNote='';document.getElementById('sync').textContent='● 실시간';
+  }catch(e){ if(!LIVE){syncNote='결과를 불러오지 못했습니다. 인터넷 연결을 확인해 주세요. 자동으로 다시 시도합니다.'} }
+  if(!document.getElementById('modal').innerHTML)render();
+}
+function scheduleLoad(){clearTimeout(refT);refT=setTimeout(loadAll,300)}
+(async()=>{
+  if(!window.supabase){syncNote='서버 연결 모듈을 불러오지 못했습니다. 새로고침해 주세요.';render();return}
+  SB=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:false}});
+  try{const saved=localStorage.getItem('bd_pw');if(saved&&await checkPw(saved)){PW=saved;ADMIN=true}}catch(e){}
+  setRole(); await loadAll();
+  SB.channel('live').on('postgres_changes',{event:'*',schema:'public',table:'results'},scheduleLoad).on('postgres_changes',{event:'*',schema:'public',table:'config'},scheduleLoad).subscribe();
+  setInterval(loadAll,15000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadAll()});
+})();
+</script></body></html>
