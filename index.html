@@ -306,8 +306,8 @@ function vPlayer(){
   return h;
 }
 let LOG=null,LOGF='',ADMS=null,LOGBUSY=false,ADMT=null;
-async function loadLog(){if(!ADMIN||LOGBUSY)return;LOGBUSY=true;try{const me=await whoami(PW);if(!me){LOGBUSY=false;logout();toast('비밀번호가 바뀌었습니다. 다시 로그인해 주세요');return}ME=me;setRole();const r=await SB.rpc('admin_get_log',{pw:PW,lim:500});if(!r.error){LOG=r.data||[]}
-  if(ME.master){const a=await SB.rpc('admin_list_admins',{pw:PW});ADMS=a.error?[]:(a.data||[])}else ADMS=null}catch(e){}LOGBUSY=false;if(VIEW==='log'&&!document.getElementById('modal').innerHTML&&!typing())render()}
+async function loadLog(){if(!ADMIN||LOGBUSY)return;LOGBUSY=true;try{const me=await whoami(PW);if(!me){LOGBUSY=false;logout();toast('비밀번호가 바뀌었습니다. 다시 로그인해 주세요');return}ME=me;setRole();if(ME.master){const r=await SB.rpc('admin_get_log',{pw:PW,lim:500});LOG=r.error?[]:(r.data||[])}else LOG=[];
+  {const a=await SB.rpc('admin_list_admins',{pw:PW});ADMS=a.error?[]:(a.data||[])}}catch(e){}LOGBUSY=false;if(VIEW==='log'&&!document.getElementById('modal').innerHTML&&!typing())render()}
 function mLabel(id){const m=byId[id];if(!m)return esc(id);if(m.self)return `<b>교내 평가전</b> · ${nm(m.a)} <span class="small">vs</span> ${nm(m.b)}`;
   return `<b>${dayOf(m.seg)===0?'1일차':'2일차'} ${GYM[m.gym].slice(0,3)} ${NO[m.id]}번</b> · ${nm(m.a)} <span class="small">vs</span> ${nm(m.b)}`}
 function logDesc(e){const b=e.before||{},a=e.after||{};
@@ -324,10 +324,11 @@ function logDesc(e){const b=e.before||{},a=e.after||{};
   } return esc(e.action)}
 function fmtT(t){const d=new Date(t);return d.toLocaleString('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}
 function vLog(){
-  if(LOG===null){loadLog();return `<div class="card"><h2>사용 기록</h2><div class="small">불러오는 중…</div></div>`}
+  if(LOG===null){loadLog();return `<div class="card"><h2>${ME&&ME.master?'사용 기록':'관리자 목록'}</h2><div class="small">불러오는 중…</div></div>`}
+  if(!(ME&&ME.master)) return `<div class="card"><h2>관리자 목록 <small>현재 등록된 관리자 ${ADMS?ADMS.length+'명':''}</small></h2>${(ADMS||[]).map(a=>`<div class="qrow"><span class="who"><b>${esc(a.name)}</b> ${a.is_master?'<span class="st st-d">총괄</span>':''}${ME&&ME.id===a.id?' <span class="small">(나)</span>':''}</span></div>`).join('')}<div class="small" style="margin-top:8px">사용 기록 보기와 관리자 추가·변경은 총괄 관리자만 할 수 있습니다.</div></div>`;
   const names=[...new Set(LOG.map(e=>e.admin_name))];
   const list=LOG.filter(e=>!LOGF||e.admin_name===LOGF);
-  let h=`<div class="card"><h2>사용 기록 <small>관리자만 보임 · 최근 ${LOG.length}건 · 누가 언제 무엇을 바꿨는지 자동 기록</small></h2>
+  let h=`<div class="card"><h2>사용 기록 <small>총괄 관리자만 보임 · 최근 ${LOG.length}건 · 누가 언제 무엇을 바꿨는지 자동 기록</small></h2>
   <div class="seg"><button class="${!LOGF?'on':''}" onclick="LOGF='';render()">전체</button>${names.map(n=>`<button class="${LOGF===n?'on':''}" onclick="LOGF=${esc(JSON.stringify(n))};render()">${esc(n)}</button>`).join('')}<button onclick="LOG=null;render()">↻ 새로고침</button>${ME&&ME.master&&list.length?`<button style="border-color:#f3c4bd;color:#b23a2a" onclick="delLogAll()">${LOGF?esc(LOGF)+' 기록 ':'기록 '}전체 삭제</button>`:''}</div>
   ${list.length?`<div class="scroll"><table class="lg"><tr><th>시각</th><th>관리자</th><th class="l">내용</th>${ME&&ME.master?'<th></th>':''}</tr>${list.map(e=>`<tr><td class="small">${fmtT(e.at)}</td><td><b>${esc(e.admin_name)}</b></td><td class="l">${logDesc(e)}</td>${ME&&ME.master?`<td><button class="xdel" aria-label="이 기록 삭제" onclick="delLog(${e.id})">✕</button></td>`:''}</tr>`).join('')}</table></div>`:'<div class="small">아직 기록이 없습니다.</div>'}</div>`;
   if(ME&&ME.master){
@@ -486,7 +487,7 @@ setInterval(()=>{if(VIEW==='court'&&!document.getElementById('modal').innerHTML)
 render();
 const SB_URL='https://kfqylcraxzkldxsgafgd.supabase.co', SB_KEY='sb_publishable_zb1v2mOSuowDwNn5hnYh0w_dBNkijbz';
 let SB=null, PW=null, ME=null;
-function setRole(){const role=document.getElementById('role');role.textContent=ADMIN?'관리자 · '+(ME&&ME.name||''):'보기 전용';document.getElementById('navlog').style.display=ADMIN?'':'none';role.className='badge '+(ADMIN?'b-admin':'b-view');document.getElementById('loginBtn').textContent=ADMIN?'로그아웃':'관리자';}
+function setRole(){const role=document.getElementById('role');role.textContent=ADMIN?'관리자 · '+(ME&&ME.name||''):'보기 전용';document.getElementById('navlog').style.display=ADMIN?'':'none';document.getElementById('navlog').textContent=ME&&ME.master?'기록':'관리자 목록';role.className='badge '+(ADMIN?'b-admin':'b-view');document.getElementById('loginBtn').textContent=ADMIN?'로그아웃':'관리자';}
 function logout(){PW=null;ADMIN=false;ME=null;LOG=null;try{localStorage.removeItem('bd_pw')}catch(e){}setRole();render()}
 function adminBtn(){ if(ADMIN){logout();toast('로그아웃했습니다');return}
   document.getElementById('modal').innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="box"><h3>관리자 로그인</h3>
