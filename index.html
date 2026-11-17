@@ -134,6 +134,7 @@ table.tt td.cell.adm:hover{background:#FFF4E6}
 table.pt td{font-size:13px;white-space:nowrap;padding:8px 4px}
 table.pt tr.dh td{background:var(--lt);color:var(--g);font-weight:800;text-align:left;font-size:13px}
 table.pt tr.mv td{background:#FDECEA;color:var(--red);font-weight:800;font-size:12px;text-align:left}
+.rnote{color:#c62828;font-size:13px;font-weight:700;line-height:1.5;margin:0 0 10px;word-break:keep-all}
 .vids{margin:22px 0 4px}
 .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .promo{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--tx);background:#fff;border:1px solid var(--ln);border-radius:12px;padding:6px}
@@ -237,6 +238,7 @@ function vList(){
   h+=`<div class="card tt-card"><h2><span class="gtag ${GYMC[t.gym]}">${GYM[t.gym]}</span> ${t.day===0?'11/21(토)':'11/22(일)'} <small>${COURTS[t.gym]}코트 · ${ms.length}경기 · 완료 ${doneN}</small></h2>
   <div class="filters"><input type="search" placeholder="선수 이름으로 찾기 (해당 경기 강조)" value="${esc(TQ)}" oninput="TQ=this.value;renderKeep()"></div>
   ${ADMIN?'<div class="adminbar">✎ 관리자 모드 · 주황색 <b>점수 입력</b> 표시가 있는 칸을 누르면 점수를 넣을 수 있어요. 입력한 칸은 <b>수정</b>으로 바뀝니다.</div>':''}
+  <div class="rnote">※ 표의 빈 칸은 한 선수가 3경기 연속 출전하지 않도록 휴식 시간을 보장하기 위한 것입니다.<br>※ 경기 순서와 코트 배정은 현장 상황에 따라 운영진이 조정할 수 있습니다.</div>
   <div class="scroll ttwrap"><table class="tt"><tr><th class="tcol">시각</th>${Array.from({length:COURTS[t.gym]},(_,i)=>`<th>${i+1}코트</th>`).join('')}</tr>`;
   for(const seg of segs){
     if(seg===2) h+=`<tr class="lu"><td colspan="${COURTS[t.gym]+1}">${lunchTxt()} · ${t.gym===0?'안흥초 팀 → 안흥초체육관으로 이동':'태장초 팀 → 이천중체육관으로 이동'}</td></tr>`;
@@ -281,6 +283,7 @@ function vPlayer(){
   <div class="statgrid"><div><b>${ms.length}</b><span>대회 경기</span></div><div><b>${c[0]}</b><span>1일차</span></div><div><b>${c[1]}</b><span>2일차</span></div><div><b>${dn}</b><span>완료</span></div></div>
   ${live?`<div class="adminbar" style="background:#E8F5EC;border-color:#9fd0ae;color:#1F6B3F">● 지금 경기 중 · ${GYM[R[live.id].gym]} ${R[live.id].court}코트 · 상대 ${esc(live.a===p?live.b:live.a)}</div>`:''}
   <div class="small" style="margin-bottom:8px">체육관: 1일차 <b>${GYM[t.loc[0]]}</b> · 2일차 오전 <b>${GYM[t.loc[1]]}</b> · 2일차 오후 <b>${GYM[t.loc[2]]}</b></div>
+  <div class="rnote">※ 경기 사이 빈 시간은 한 선수가 3경기 연속 출전하지 않도록 휴식 시간을 보장하기 위한 것입니다.<br>※ 경기 순서와 코트 배정은 현장 상황에 따라 운영진이 조정할 수 있습니다.</div>
   <div class="scroll"><table class="pt"><tr><th>번호</th><th>시각</th><th>체육관·코트</th><th class="l">상대</th><th>결과</th></tr>`;
   for(const d of [0,1]){
     h+=`<tr class="dh"><td colspan="5">${DAYN[d]} · ${c[d]}경기</td></tr>`;
