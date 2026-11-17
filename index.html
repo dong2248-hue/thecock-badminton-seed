@@ -506,19 +506,24 @@ async function loadAll(){
     if(a.error)throw a.error;
     const n={};(a.data||[]).forEach(x=>{if(byId[x.id])n[x.id]={st:x.st,gym:x.gym,court:x.court,start:x.start_at==null?null:Number(x.start_at),end:x.end_at==null?null:Number(x.end_at),sa:x.sa,sb:x.sb}});
     R=n; if(c.data){CFG={seg:[0,1,2].includes(c.data.seg)?c.data.seg:0,rest:Number.isFinite(c.data.rest)?c.data.rest:20}}
-    LIVE=true;syncNote='';document.getElementById('sync').textContent='● 실시간';
+    LIVE=true;lastFull=Date.now();syncNote='';document.getElementById('sync').textContent='● 실시간';
   }catch(e){ if(!LIVE){syncNote='결과를 불러오지 못했습니다. 인터넷 연결을 확인해 주세요. 자동으로 다시 시도합니다.'} }
   if(ADMIN&&VIEW==='log')loadLog();
   if(!document.getElementById('modal').innerHTML&&!typing())render();
 }
 function scheduleLoad(){clearTimeout(refT);refT=setTimeout(loadAll,300)}
+let RT=false,lastFull=Date.now(),rtT=null;
+function rtRender(){clearTimeout(rtT);rtT=setTimeout(()=>{if(ADMIN&&VIEW==='log')loadLog();if(!document.getElementById('modal').innerHTML&&!typing())render()},150)}
+function onRes(p){const x=p.new&&p.new.id?p.new:null;if(p.eventType==='DELETE'||!x){const id=(p.old&&p.old.id);if(id){delete R[id];rtRender()}else scheduleLoad();return}
+  if(!byId[x.id])return;R[x.id]={st:x.st,gym:x.gym,court:x.court,start:x.start_at==null?null:Number(x.start_at),end:x.end_at==null?null:Number(x.end_at),sa:x.sa,sb:x.sb};rtRender()}
+function onCfg(p){const c=p.new;if(c&&c.k==='main'){CFG={seg:[0,1,2].includes(c.seg)?c.seg:0,rest:Number.isFinite(c.rest)?c.rest:20};rtRender()}else scheduleLoad()}
 (async()=>{
   if(!window.supabase){syncNote='서버 연결 모듈을 불러오지 못했습니다. 새로고침해 주세요.';render();return}
   SB=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:false}});
   try{const saved=localStorage.getItem('bd_pw');const me=saved&&await whoami(saved);if(me){PW=saved;ME=me;ADMIN=true}}catch(e){}
   setRole(); await loadAll();
-  SB.channel('live').on('postgres_changes',{event:'*',schema:'public',table:'results'},scheduleLoad).on('postgres_changes',{event:'*',schema:'public',table:'config'},scheduleLoad).subscribe();
-  setInterval(loadAll,15000);
+  SB.channel('live').on('postgres_changes',{event:'*',schema:'public',table:'results'},onRes).on('postgres_changes',{event:'*',schema:'public',table:'config'},onCfg).subscribe(st=>{const was=RT;RT=st==='SUBSCRIBED';if(RT&&!was)loadAll()});
+  setInterval(()=>{if(document.hidden)return;const age=Date.now()-lastFull;if(!RT&&age>15000||age>300000)loadAll()},5000);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadAll()});
 })();
 </script></body></html>
