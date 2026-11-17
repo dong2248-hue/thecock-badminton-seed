@@ -217,9 +217,9 @@ function vCourt(){
 }
 function lunchTxt(){const p=D.lunch.split(':').map(Number);const m=p[0]*60+p[1]-30;return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}–${D.lunch}`}
 function progressCard(){
-  const segs=[0,1,2].map(s=>{const ms=D.matches.filter(m=>m.seg===s);return [ms.filter(m=>done(m.id)).length,ms.length]});
+  const segs=TTS.map(t=>{const ms=D.matches.filter(m=>dayOf(m.seg)===t.day&&m.gym===t.gym);return [ms.filter(m=>done(m.id)).length,ms.length,t.label+' · '+(t.day===0?'11/21(토)':'11/22(일)')]});
   const all=D.matches.filter(m=>done(m.id)).length, sf=D.selfm.filter(m=>done(m.id)).length;
-  return `<div class="card"><h2>진행 현황</h2>${segs.map((x,i)=>`<div class="small">${SEGN[i]} · 계획 기준 ${x[0]}/${x[1]}</div><div class="prog"><i style="width:${x[1]?x[0]/x[1]*100:0}%"></i></div>`).join('')}
+  return `<div class="card"><h2>진행 현황</h2>${segs.map(x=>`<div class="small">${x[2]} · 완료 ${x[0]}/${x[1]}경기</div><div class="prog"><i style="width:${x[1]?x[0]/x[1]*100:0}%"></i></div>`).join('')}
   <div class="small" style="margin-top:6px">대회 경기 ${all}/362 완료 · 교내 평가전 ${sf}/44 입력</div></div>`+videoBlock();
 }
 const VIDS=['iT9WnaJVWrs','gLdruGZZXNE','IkUF6XPH1sY','8hqXk7ukspo'], CH_LOGO='https://yt3.ggpht.com/Z3mdUq1H93zCM6ZmkK2HDXcZ4rgcyM7R4joAKnzOH-TYeBQZeiztcycV9Tmg_kYnzYtzenPfrQ=s88-c-k-c0x00ffffff-no-rj';
