@@ -196,7 +196,7 @@ const segFor=day=>day===0?0:(CFG.seg>=1?CFG.seg:1);
 function vCourt(){
   const ti=TT??(CFG.seg===0?0:1), t=TTS[ti], day=t.day, g=t.gym, seg=segFor(day); let h='';
   h+=`<div class="seg">${TTS.map((x,i)=>`<button class="${i===ti?'on':''}" onclick="TT=${i};render()">${x.label}</button>`).join('')}</div>`;
-  if(day===1) h+=`<div class="lunch">2일차 점심·이동 ${lunchTxt()} · ${g===0?'안흥초 팀 → 안흥초체육관으로 이동 · 태장초 팀 합류':'태장초 팀 → 이천중체육관으로 이동 · 안흥초 팀 합류'}${ADMIN?` <span style="font-weight:500">· 지금 <b>${seg===1?'오전':'오후'}</b> 기준 추천</span> <button class="btn" style="padding:3px 8px;font-size:12px" onclick="setSeg(${seg===1?2:1})">${seg===1?'오후로 전환':'오전으로 전환'}</button>`:''}</div>`;
+  if(day===1) h+=`<div class="lunch" style="text-align:center">${lunchTxt()} · ${g===0?'안흥초 팀 → 안흥초체육관으로 이동':'태장초 팀 → 이천중체육관으로 이동'}${ADMIN?`<br><span style="font-weight:500">지금 <b>${seg===1?'오전':'오후'}</b> 기준 추천</span> <button class="btn" style="padding:3px 8px;font-size:12px" onclick="setSeg(${seg===1?2:1})">${seg===1?'오후로 전환':'오전으로 전환'}</button>`:''}</div>`;
   const lv=liveList().filter(m=>R[m.id].gym===g);
   const byC={};lv.forEach(m=>byC[R[m.id].court]=m);
   const planned=D.matches.filter(m=>dayOf(m.seg)===day&&m.gym===g), pd=planned.filter(m=>done(m.id)).length;
@@ -224,7 +224,7 @@ function progressCard(){
 }
 const VIDS=['iT9WnaJVWrs','gLdruGZZXNE','IkUF6XPH1sY','8hqXk7ukspo'], CH_LOGO='https://yt3.ggpht.com/Z3mdUq1H93zCM6ZmkK2HDXcZ4rgcyM7R4joAKnzOH-TYeBQZeiztcycV9Tmg_kYnzYtzenPfrQ=s88-c-k-c0x00ffffff-no-rj';
 function videoBlock(){
-  return `<div class="vids"><div class="vgrid">${VIDS.map(id=>`<a class="promo" href="https://youtu.be/${id}" target="_blank" rel="noopener" aria-label="더콕배드민턴 유튜브 영상 보기"><span class="pthumb"><img src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="" loading="lazy"><i class="play"></i></span><span class="ptxt"><img class="plogo" src="${CH_LOGO}" alt=""><b>더콕배드민턴</b></span></a>`).join('')}</div>
+  return `<div class="vids"><div class="vgrid">${VIDS.map(id=>`<a class="promo" href="https://youtu.be/${id}" target="_blank" rel="noopener" aria-label="더콕배드민턴 유튜브 영상 보기"><span class="pthumb"><img src="https://i.ytimg.com/vi/${id}/mqdefault.jpg" alt="" loading="lazy"><i class="play"></i></span></a>`).join('')}</div>
   <a class="vfoot" href="https://www.youtube.com/@thecock_badminton" target="_blank" rel="noopener"><img src="${CH_LOGO}" alt="더콕배드민턴 로고"><b>더콕배드민턴</b></a></div>`;
 }
 let TQ='';
