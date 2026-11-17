@@ -138,6 +138,7 @@ table.pt tr.mv td{background:#FDECEA;color:var(--red);font-weight:800;font-size:
 table.lg td{vertical-align:top;font-size:13px;padding:8px 5px}table.lg td.small,table.lg td:nth-child(2){white-space:nowrap}
 .la{display:inline-block;font-size:11px;font-weight:800;padding:1px 7px;border-radius:7px;margin-right:4px;color:#fff}
 .la-g{background:#2E7D4F}.la-o{background:#D9822B}.la-r{background:#b23a2a}.la-b{background:#1F4E3D}.la-x{background:#8a968f}
+.qrow .btn{padding:6px 9px;font-size:12px}
 .vids{margin:22px 0 4px}
 .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .promo{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--tx);background:#fff;border:1px solid var(--ln);border-radius:12px;padding:6px}
@@ -304,8 +305,8 @@ function vPlayer(){
   return h;
 }
 let LOG=null,LOGF='',ADMS=null,LOGBUSY=false;
-async function loadLog(){if(!ADMIN||LOGBUSY)return;LOGBUSY=true;try{const r=await SB.rpc('admin_get_log',{pw:PW,lim:500});if(!r.error){LOG=r.data||[]}
-  if(ME&&ME.master){const a=await SB.rpc('admin_list_admins',{pw:PW});if(!a.error)ADMS=a.data||[]}}catch(e){}LOGBUSY=false;if(VIEW==='log'&&!document.getElementById('modal').innerHTML&&!typing())render()}
+async function loadLog(){if(!ADMIN||LOGBUSY)return;LOGBUSY=true;try{const me=await whoami(PW);if(!me){LOGBUSY=false;logout();toast('비밀번호가 바뀌었습니다. 다시 로그인해 주세요');return}ME=me;setRole();const r=await SB.rpc('admin_get_log',{pw:PW,lim:500});if(!r.error){LOG=r.data||[]}
+  if(ME.master){const a=await SB.rpc('admin_list_admins',{pw:PW});ADMS=a.error?[]:(a.data||[])}else ADMS=null}catch(e){}LOGBUSY=false;if(VIEW==='log'&&!document.getElementById('modal').innerHTML&&!typing())render()}
 function mLabel(id){const m=byId[id];if(!m)return esc(id);if(m.self)return `<b>교내 평가전</b> · ${nm(m.a)} <span class="small">vs</span> ${nm(m.b)}`;
   return `<b>${dayOf(m.seg)===0?'1일차':'2일차'} ${GYM[m.gym].slice(0,3)} ${NO[m.id]}번</b> · ${nm(m.a)} <span class="small">vs</span> ${nm(m.b)}`}
 function logDesc(e){const b=e.before||{},a=e.after||{};
@@ -316,6 +317,8 @@ function logDesc(e){const b=e.before||{},a=e.after||{};
     case 'config':return `<span class="la la-x">설정 변경</span> ${b.seg!==a.seg?`진행 구간 ${SEGN[b.seg]||'-'} → <b>${SEGN[a.seg]}</b>`:''} ${b.rest!==a.rest?`최소 휴식 ${b.rest}분 → <b>${a.rest}분</b>`:''}`;
     case 'admin_add':return `<span class="la la-x">관리자 추가</span> ${esc(a.name||'')}`;
     case 'admin_remove':return `<span class="la la-x">관리자 삭제</span> ${esc(b.name||'')}`;
+    case 'admin_rename':return `<span class="la la-x">이름 변경</span> ${esc(b.name||'')} → <b>${esc(a.name||'')}</b>`;
+    case 'admin_code':return `<span class="la la-x">번호 변경</span> ${esc(a.name||'')}`;
   } return esc(e.action)}
 function fmtT(t){const d=new Date(t);return d.toLocaleString('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}
 function vLog(){
@@ -328,7 +331,9 @@ function vLog(){
   if(ME&&ME.master){
     h+=`<div class="card"><h2>관리자 번호 관리 <small>총괄 관리자만 보임</small></h2>
     <div class="small" style="margin-bottom:8px">운영진마다 다른 번호를 주면, 그 번호로 한 작업이 이름과 함께 기록됩니다.</div>
-    ${(ADMS||[]).map(a=>`<div class="qrow"><span class="who"><b>${esc(a.name)}</b> ${a.is_master?'<span class="st st-d">총괄</span>':''}</span>${a.is_master?'':`<button class="btn warn" onclick="rmAdmin(${a.id},${esc(JSON.stringify(a.name))})">삭제</button>`}</div>`).join('')}
+    <div class="small" style="font-weight:700;margin-bottom:2px">현재 등록된 관리자 ${ADMS?ADMS.length+'명':''}</div>
+    ${ADMS===null?'<div class="small">불러오는 중…</div>':ADMS.map(a=>`<div class="qrow"><span class="who"><b>${esc(a.name)}</b> ${a.is_master?'<span class="st st-d">총괄</span>':''}${ME&&ME.id===a.id?' <span class="small">(나)</span>':''}</span><button class="btn" onclick="renAdmin(${a.id},${esc(JSON.stringify(a.name))})">이름 변경</button><button class="btn" onclick="codeAdmin(${a.id},${esc(JSON.stringify(a.name))},${a.is_master})">번호 변경</button>${a.is_master?'':`<button class="btn warn" onclick="rmAdmin(${a.id},${esc(JSON.stringify(a.name))})">삭제</button>`}</div>`).join('')}
+    <div class="small" style="margin:12px 0 0;font-weight:700">새 관리자 추가</div>
     <div class="filters" style="margin-top:10px"><input id="anm" type="search" placeholder="이름 (예: 김코치)" maxlength="20" style="min-width:110px"><input id="acd" type="search" inputmode="numeric" placeholder="번호 4~8자리" maxlength="8" style="min-width:110px"><button class="btn pri" onclick="addAdmin()">추가</button></div>
     <div id="aerr" class="small" style="color:#b23a2a;min-height:18px"></div></div>`}
   return h;
@@ -338,6 +343,12 @@ async function addAdmin(){const n=document.getElementById('anm').value.trim(),c=
   er.textContent='추가 중…';const r=await SB.rpc('admin_add_admin',{pw:PW,new_name:n,new_code:c});
   if(r.error){er.textContent=/in use/.test(r.error.message)?'이미 다른 관리자가 쓰는 번호입니다.':'추가하지 못했습니다.';return}
   toast(n+' 관리자 추가 완료');LOG=null;render()}
+async function renAdmin(id,n){const v=prompt(n+' 의 새 이름을 입력해 주세요 (20자 이내)',n);if(v==null)return;const t=v.trim();if(!t||t.length>20){toast('이름을 확인해 주세요');return}
+  const r=await SB.rpc('admin_rename_admin',{pw:PW,target:id,new_name:t});if(r.error){toast('변경하지 못했습니다');return}toast('이름을 바꿨습니다');LOG=null;render()}
+async function codeAdmin(id,n,master){const v=prompt(n+' 의 새 번호를 입력해 주세요'+(master?' (6자 이상)':' (숫자 4~8자리)'));if(v==null)return;const c=v.trim();
+  if(master?c.length<6:!/^[0-9]{4,8}$/.test(c)){toast(master?'6자 이상 입력해 주세요':'숫자 4~8자리로 입력해 주세요');return}
+  const r=await SB.rpc('admin_set_code',{pw:PW,target:id,new_code:c});if(r.error){toast(/in use/.test(r.error.message)?'이미 다른 관리자가 쓰는 번호입니다':'변경하지 못했습니다');return}
+  if(ME&&ME.id===id){PW=c;try{localStorage.setItem('bd_pw',c)}catch(e){}}toast(n+' 번호를 바꿨습니다');LOG=null;render()}
 async function rmAdmin(id,n){if(!confirm(n+' 관리자 번호를 삭제할까요? (지금까지 기록은 남습니다)'))return;const r=await SB.rpc('admin_remove_admin',{pw:PW,target:id});if(r.error){toast('삭제하지 못했습니다');return}toast('삭제했습니다');LOG=null;render()}
 function pickPlayer(p){PSEL=p;PTEAM=team[p];try{localStorage.setItem('bd_player',p)}catch(e){}history.replaceState(null,'','#player/'+encodeURIComponent(p));PHASH=location.hash;render()}
 function copyPlayer(){const u=location.origin+location.pathname+'#player/'+encodeURIComponent(PSEL);
