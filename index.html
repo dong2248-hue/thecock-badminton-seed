@@ -304,7 +304,7 @@ function vPlayer(){
   h+=`</table></div><div class="small" style="margin-top:8px">· 번호는 그날 그 체육관의 경기 번호예요(코트 현황·타임테이블과 같은 번호).<br>· 시각은 계획 기준이라 실제 진행에 따라 조금 당겨지거나 늦어질 수 있어요.${sm.length?`<br>· 교내 평가전 ${sm.length}경기(같은 학교끼리)는 따로 진행하고 결과만 순위에 반영해요.`:''}</div></div>`;
   return h;
 }
-let LOG=null,LOGF='',ADMS=null,LOGBUSY=false;
+let LOG=null,LOGF='',ADMS=null,LOGBUSY=false,ADMT=null;
 async function loadLog(){if(!ADMIN||LOGBUSY)return;LOGBUSY=true;try{const me=await whoami(PW);if(!me){LOGBUSY=false;logout();toast('비밀번호가 바뀌었습니다. 다시 로그인해 주세요');return}ME=me;setRole();const r=await SB.rpc('admin_get_log',{pw:PW,lim:500});if(!r.error){LOG=r.data||[]}
   if(ME.master){const a=await SB.rpc('admin_list_admins',{pw:PW});ADMS=a.error?[]:(a.data||[])}else ADMS=null}catch(e){}LOGBUSY=false;if(VIEW==='log'&&!document.getElementById('modal').innerHTML&&!typing())render()}
 function mLabel(id){const m=byId[id];if(!m)return esc(id);if(m.self)return `<b>교내 평가전</b> · ${nm(m.a)} <span class="small">vs</span> ${nm(m.b)}`;
@@ -343,13 +343,17 @@ async function addAdmin(){const n=document.getElementById('anm').value.trim(),c=
   er.textContent='추가 중…';const r=await SB.rpc('admin_add_admin',{pw:PW,new_name:n,new_code:c});
   if(r.error){er.textContent=/in use/.test(r.error.message)?'이미 다른 관리자가 쓰는 번호입니다.':'추가하지 못했습니다.';return}
   toast(n+' 관리자 추가 완료');LOG=null;render()}
-async function renAdmin(id,n){const v=prompt(n+' 의 새 이름을 입력해 주세요 (20자 이내)',n);if(v==null)return;const t=v.trim();if(!t||t.length>20){toast('이름을 확인해 주세요');return}
-  const r=await SB.rpc('admin_rename_admin',{pw:PW,target:id,new_name:t});if(r.error){toast('변경하지 못했습니다');return}toast('이름을 바꿨습니다');LOG=null;render()}
-async function codeAdmin(id,n,master){const v=prompt(n+' 의 새 번호를 입력해 주세요'+(master?' (6자 이상)':' (숫자 4~8자리)'));if(v==null)return;const c=v.trim();
-  if(master?c.length<6:!/^[0-9]{4,8}$/.test(c)){toast(master?'6자 이상 입력해 주세요':'숫자 4~8자리로 입력해 주세요');return}
-  const r=await SB.rpc('admin_set_code',{pw:PW,target:id,new_code:c});if(r.error){toast(/in use/.test(r.error.message)?'이미 다른 관리자가 쓰는 번호입니다':'변경하지 못했습니다');return}
-  if(ME&&ME.id===id){PW=c;try{localStorage.setItem('bd_pw',c)}catch(e){}}toast(n+' 번호를 바꿨습니다');LOG=null;render()}
-async function rmAdmin(id,n){if(!confirm(n+' 관리자 번호를 삭제할까요? (지금까지 기록은 남습니다)'))return;const r=await SB.rpc('admin_remove_admin',{pw:PW,target:id});if(r.error){toast('삭제하지 못했습니다');return}toast('삭제했습니다');LOG=null;render()}
+function admModal(title,body,btn,fn){document.getElementById('modal').innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="box"><h3>${title}</h3>${body}<div id="merr" class="small" style="color:#b23a2a;min-height:18px"></div><div class="mrow"><button class="btn" onclick="closeModal()">취소</button><button class="btn ${btn[1]}" onclick="${fn}">${btn[0]}</button></div></div></div>`;setTimeout(()=>{const e=document.getElementById('min');e&&e.focus()},50)}
+function renAdmin(id,n){ADMT={id,n};admModal(`${esc(n)} · 이름 변경`,`<input id="min" class="pwin" type="text" maxlength="20" value="${esc(n)}" placeholder="새 이름 (20자 이내)">`,['저장','pri'],'doRen()')}
+async function doRen(){const t=document.getElementById('min').value.trim(),er=document.getElementById('merr');if(!t||t.length>20){er.textContent='이름을 1~20자로 입력해 주세요.';return}
+  er.textContent='저장 중…';const r=await SB.rpc('admin_rename_admin',{pw:PW,target:ADMT.id,new_name:t});if(r.error){er.textContent='변경하지 못했습니다.';return}closeModal();toast('이름을 바꿨습니다');LOG=null;render()}
+function codeAdmin(id,n,master){ADMT={id,n,master};admModal(`${esc(n)} · 번호 변경`,`<div class="small">${master?'총괄 비밀번호는 6자 이상':'운영진 번호는 숫자 4~8자리'}로 입력해 주세요.</div><input id="min" class="pwin" type="text" ${master?'':'inputmode="numeric"'} maxlength="${master?30:8}" autocomplete="off" placeholder="새 번호">`,['저장','pri'],'doCode()')}
+async function doCode(){const c=document.getElementById('min').value.trim(),er=document.getElementById('merr'),m=ADMT.master;
+  if(m?c.length<6:!/^[0-9]{4,8}$/.test(c)){er.textContent=m?'6자 이상 입력해 주세요.':'숫자 4~8자리로 입력해 주세요.';return}
+  er.textContent='저장 중…';const r=await SB.rpc('admin_set_code',{pw:PW,target:ADMT.id,new_code:c});if(r.error){er.textContent=/in use/.test(r.error.message)?'이미 다른 관리자가 쓰는 번호입니다.':'변경하지 못했습니다.';return}
+  if(ME&&ME.id===ADMT.id){PW=c;try{localStorage.setItem('bd_pw',c)}catch(e){}}closeModal();toast(ADMT.n+' 번호를 바꿨습니다');LOG=null;render()}
+function rmAdmin(id,n){ADMT={id,n};admModal(`${esc(n)} · 삭제`,`<div class="small">이 관리자 번호를 삭제할까요? 지금까지 남긴 기록은 그대로 남습니다.</div>`,['삭제','warn'],'doRm()')}
+async function doRm(){const er=document.getElementById('merr');er.textContent='삭제 중…';const r=await SB.rpc('admin_remove_admin',{pw:PW,target:ADMT.id});if(r.error){er.textContent='삭제하지 못했습니다.';return}closeModal();toast('삭제했습니다');LOG=null;render()}
 function pickPlayer(p){PSEL=p;PTEAM=team[p];try{localStorage.setItem('bd_player',p)}catch(e){}history.replaceState(null,'','#player/'+encodeURIComponent(p));PHASH=location.hash;render()}
 function copyPlayer(){const u=location.origin+location.pathname+'#player/'+encodeURIComponent(PSEL);
   (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>toast('링크를 복사했어요. 카톡에 붙여넣기 하세요')).catch(()=>prompt('이 주소를 복사하세요',u))}
