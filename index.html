@@ -135,6 +135,9 @@ table.pt td{font-size:13px;white-space:nowrap;padding:8px 4px}
 table.pt tr.dh td{background:var(--lt);color:var(--g);font-weight:800;text-align:left;font-size:13px}
 table.pt tr.mv td{background:#FDECEA;color:var(--red);font-weight:800;font-size:12px;text-align:left}
 .rnote{color:#c62828;font-size:13px;font-weight:700;line-height:1.5;margin:0 0 10px;word-break:keep-all}
+table.lg td{vertical-align:top;font-size:13px;padding:8px 5px}table.lg td.small,table.lg td:nth-child(2){white-space:nowrap}
+.la{display:inline-block;font-size:11px;font-weight:800;padding:1px 7px;border-radius:7px;margin-right:4px;color:#fff}
+.la-g{background:#2E7D4F}.la-o{background:#D9822B}.la-r{background:#b23a2a}.la-b{background:#1F4E3D}.la-x{background:#8a968f}
 .vids{margin:22px 0 4px}
 .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .promo{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--tx);background:#fff;border:1px solid var(--ln);border-radius:12px;padding:6px}
@@ -155,7 +158,7 @@ table.pt tr.mv td{background:#FDECEA;color:var(--red);font-weight:800;font-size:
   <h1>소년체전 경기도대표 선발시드 평가전</h1>
   <div class="sub"><span>남자초등부 단식 · 31점 1세트</span><span id="role" class="badge b-view">보기 전용</span><span id="sync"></span><button id="loginBtn" class="hbtn" onclick="adminBtn()">관리자</button></div>
   <nav id="nav">
-    <a href="#court" data-v="court">코트 현황</a><a href="#list" data-v="list">타임테이블</a><a href="#player" data-v="player">선수별 시간표</a><a href="#rank" data-v="rank">순위</a><a href="#self" data-v="self">교내 평가전</a><a href="#info" data-v="info">안내</a>
+    <a href="#court" data-v="court">코트 현황</a><a href="#list" data-v="list">타임테이블</a><a href="#player" data-v="player">선수별 시간표</a><a href="#rank" data-v="rank">순위</a><a href="#self" data-v="self">교내 평가전</a><a href="#info" data-v="info">안내</a><a href="#log" data-v="log" id="navlog" style="display:none">기록</a>
   </nav>
 </header>
 <main id="app"></main>
@@ -300,6 +303,42 @@ function vPlayer(){
   h+=`</table></div><div class="small" style="margin-top:8px">· 번호는 그날 그 체육관의 경기 번호예요(코트 현황·타임테이블과 같은 번호).<br>· 시각은 계획 기준이라 실제 진행에 따라 조금 당겨지거나 늦어질 수 있어요.${sm.length?`<br>· 교내 평가전 ${sm.length}경기(같은 학교끼리)는 따로 진행하고 결과만 순위에 반영해요.`:''}</div></div>`;
   return h;
 }
+let LOG=null,LOGF='',ADMS=null,LOGBUSY=false;
+async function loadLog(){if(!ADMIN||LOGBUSY)return;LOGBUSY=true;try{const r=await SB.rpc('admin_get_log',{pw:PW,lim:500});if(!r.error){LOG=r.data||[]}
+  if(ME&&ME.master){const a=await SB.rpc('admin_list_admins',{pw:PW});if(!a.error)ADMS=a.data||[]}}catch(e){}LOGBUSY=false;if(VIEW==='log'&&!document.getElementById('modal').innerHTML&&!typing())render()}
+function mLabel(id){const m=byId[id];if(!m)return esc(id);if(m.self)return `<b>교내 평가전</b> · ${nm(m.a)} <span class="small">vs</span> ${nm(m.b)}`;
+  return `<b>${dayOf(m.seg)===0?'1일차':'2일차'} ${GYM[m.gym].slice(0,3)} ${NO[m.id]}번</b> · ${nm(m.a)} <span class="small">vs</span> ${nm(m.b)}`}
+function logDesc(e){const b=e.before||{},a=e.after||{};
+  switch(e.action){
+    case 'assign':return `<span class="la la-b">코트 배정</span> ${mLabel(e.mid)}<div class="small">→ ${GYM[a.gym]??''} ${a.court??''}코트</div>`;
+    case 'score':return b.st==='done'?`<span class="la la-o">점수 수정</span> ${mLabel(e.mid)}<div class="small">${b.sa}:${b.sb} → <b>${a.sa}:${a.sb}</b></div>`:`<span class="la la-g">점수 입력</span> ${mLabel(e.mid)}<div class="small"><b>${a.sa}:${a.sb}</b></div>`;
+    case 'delete':return b.st==='live'?`<span class="la la-x">배정 취소</span> ${mLabel(e.mid)}<div class="small">${GYM[b.gym]??''} ${b.court??''}코트</div>`:`<span class="la la-r">결과 삭제</span> ${mLabel(e.mid)}<div class="small">기존 ${b.sa}:${b.sb}</div>`;
+    case 'config':return `<span class="la la-x">설정 변경</span> ${b.seg!==a.seg?`진행 구간 ${SEGN[b.seg]||'-'} → <b>${SEGN[a.seg]}</b>`:''} ${b.rest!==a.rest?`최소 휴식 ${b.rest}분 → <b>${a.rest}분</b>`:''}`;
+    case 'admin_add':return `<span class="la la-x">관리자 추가</span> ${esc(a.name||'')}`;
+    case 'admin_remove':return `<span class="la la-x">관리자 삭제</span> ${esc(b.name||'')}`;
+  } return esc(e.action)}
+function fmtT(t){const d=new Date(t);return d.toLocaleString('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}
+function vLog(){
+  if(LOG===null){loadLog();return `<div class="card"><h2>사용 기록</h2><div class="small">불러오는 중…</div></div>`}
+  const names=[...new Set(LOG.map(e=>e.admin_name))];
+  const list=LOG.filter(e=>!LOGF||e.admin_name===LOGF);
+  let h=`<div class="card"><h2>사용 기록 <small>관리자만 보임 · 최근 ${LOG.length}건 · 누가 언제 무엇을 바꿨는지 자동 기록</small></h2>
+  <div class="seg"><button class="${!LOGF?'on':''}" onclick="LOGF='';render()">전체</button>${names.map(n=>`<button class="${LOGF===n?'on':''}" onclick="LOGF=${esc(JSON.stringify(n))};render()">${esc(n)}</button>`).join('')}<button onclick="LOG=null;render()">↻ 새로고침</button></div>
+  ${list.length?`<div class="scroll"><table class="lg"><tr><th>시각</th><th>관리자</th><th class="l">내용</th></tr>${list.map(e=>`<tr><td class="small">${fmtT(e.at)}</td><td><b>${esc(e.admin_name)}</b></td><td class="l">${logDesc(e)}</td></tr>`).join('')}</table></div>`:'<div class="small">아직 기록이 없습니다.</div>'}</div>`;
+  if(ME&&ME.master){
+    h+=`<div class="card"><h2>관리자 번호 관리 <small>총괄 관리자만 보임</small></h2>
+    <div class="small" style="margin-bottom:8px">운영진마다 다른 번호를 주면, 그 번호로 한 작업이 이름과 함께 기록됩니다.</div>
+    ${(ADMS||[]).map(a=>`<div class="qrow"><span class="who"><b>${esc(a.name)}</b> ${a.is_master?'<span class="st st-d">총괄</span>':''}</span>${a.is_master?'':`<button class="btn warn" onclick="rmAdmin(${a.id},${esc(JSON.stringify(a.name))})">삭제</button>`}</div>`).join('')}
+    <div class="filters" style="margin-top:10px"><input id="anm" type="search" placeholder="이름 (예: 김코치)" maxlength="20" style="min-width:110px"><input id="acd" type="search" inputmode="numeric" placeholder="번호 4~8자리" maxlength="8" style="min-width:110px"><button class="btn pri" onclick="addAdmin()">추가</button></div>
+    <div id="aerr" class="small" style="color:#b23a2a;min-height:18px"></div></div>`}
+  return h;
+}
+async function addAdmin(){const n=document.getElementById('anm').value.trim(),c=document.getElementById('acd').value.trim(),er=document.getElementById('aerr');
+  if(!n){er.textContent='이름을 입력해 주세요.';return} if(!/^[0-9]{4,8}$/.test(c)){er.textContent='번호는 숫자 4~8자리로 입력해 주세요.';return}
+  er.textContent='추가 중…';const r=await SB.rpc('admin_add_admin',{pw:PW,new_name:n,new_code:c});
+  if(r.error){er.textContent=/in use/.test(r.error.message)?'이미 다른 관리자가 쓰는 번호입니다.':'추가하지 못했습니다.';return}
+  toast(n+' 관리자 추가 완료');LOG=null;render()}
+async function rmAdmin(id,n){if(!confirm(n+' 관리자 번호를 삭제할까요? (지금까지 기록은 남습니다)'))return;const r=await SB.rpc('admin_remove_admin',{pw:PW,target:id});if(r.error){toast('삭제하지 못했습니다');return}toast('삭제했습니다');LOG=null;render()}
 function pickPlayer(p){PSEL=p;PTEAM=team[p];try{localStorage.setItem('bd_player',p)}catch(e){}history.replaceState(null,'','#player/'+encodeURIComponent(p));PHASH=location.hash;render()}
 function copyPlayer(){const u=location.origin+location.pathname+'#player/'+encodeURIComponent(PSEL);
   (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>toast('링크를 복사했어요. 카톡에 붙여넣기 하세요')).catch(()=>prompt('이 주소를 복사하세요',u))}
@@ -412,11 +451,11 @@ async function clearRes(id){closeModal(); if(await write(id,null)) toast('결과
 // ---------- render
 let VIEW='court';
 function render(){
-  VIEW=(location.hash||'#court').slice(1).split('/')[0]; if(!['court','list','player','rank','self','info'].includes(VIEW))VIEW='court';
+  VIEW=(location.hash||'#court').slice(1).split('/')[0]; if(!['court','list','player','rank','self','info','log'].includes(VIEW)||(VIEW==='log'&&!ADMIN))VIEW='court';
   document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===VIEW));
   let h='';
   if(!LIVE) h+=`<div class="note ${syncNote?'err':''}">${syncNote||'결과를 불러오는 중입니다…'}</div>`;
-  h+=({court:vCourt,list:vList,player:vPlayer,rank:vRank,self:vSelf,info:vInfo})[VIEW]();
+  h+=({court:vCourt,list:vList,player:vPlayer,rank:vRank,self:vSelf,info:vInfo,log:vLog})[VIEW]();
   document.getElementById('app').innerHTML=h;
 }
 function applyTQ(){const q=TQ.trim();document.querySelectorAll('table.tt td.cell').forEach(td=>{const hit=!!q&&td.dataset.p.split('|').some(n=>n.includes(q));td.classList.toggle('hit',hit);td.classList.toggle('dim',!!q&&!hit)})}
@@ -426,16 +465,17 @@ window.addEventListener('hashchange',render);
 setInterval(()=>{if(VIEW==='court'&&!document.getElementById('modal').innerHTML)render()},30000);
 render();
 const SB_URL='https://kfqylcraxzkldxsgafgd.supabase.co', SB_KEY='sb_publishable_zb1v2mOSuowDwNn5hnYh0w_dBNkijbz';
-let SB=null, PW=null;
-function setRole(){const role=document.getElementById('role');role.textContent=ADMIN?'관리자':'보기 전용';role.className='badge '+(ADMIN?'b-admin':'b-view');document.getElementById('loginBtn').textContent=ADMIN?'로그아웃':'관리자';}
-function logout(){PW=null;ADMIN=false;try{localStorage.removeItem('bd_pw')}catch(e){}setRole();render()}
+let SB=null, PW=null, ME=null;
+function setRole(){const role=document.getElementById('role');role.textContent=ADMIN?'관리자 · '+(ME&&ME.name||''):'보기 전용';document.getElementById('navlog').style.display=ADMIN?'':'none';role.className='badge '+(ADMIN?'b-admin':'b-view');document.getElementById('loginBtn').textContent=ADMIN?'로그아웃':'관리자';}
+function logout(){PW=null;ADMIN=false;ME=null;LOG=null;try{localStorage.removeItem('bd_pw')}catch(e){}setRole();render()}
 function adminBtn(){ if(ADMIN){logout();toast('로그아웃했습니다');return}
   document.getElementById('modal').innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="box"><h3>관리자 로그인</h3>
   <div class="small">경기 배정과 점수 입력은 관리자 비밀번호가 있어야 합니다.</div><input id="pwin" class="pwin" type="password" autocomplete="current-password" placeholder="비밀번호" onkeydown="if(event.key==='Enter')tryLogin()">
   <div id="pwerr" class="small" style="color:#b23a2a;min-height:18px"></div><div class="mrow"><button class="btn" onclick="closeModal()">취소</button><button class="btn pri" onclick="tryLogin()">로그인</button></div></div></div>`;
   setTimeout(()=>document.getElementById('pwin').focus(),50)}
 async function tryLogin(){const v=document.getElementById('pwin').value;if(!v)return;const e=document.getElementById('pwerr');e.textContent='확인 중…';
-  const ok=await checkPw(v); if(ok){PW=v;ADMIN=true;try{localStorage.setItem('bd_pw',v)}catch(x){}closeModal();setRole();render();toast('관리자 모드')}else e.textContent='비밀번호가 맞지 않습니다.'}
+  const me=await whoami(v); if(me){PW=v;ME=me;ADMIN=true;LOG=null;try{localStorage.setItem('bd_pw',v)}catch(x){}closeModal();setRole();render();toast(me.name+' 님, 관리자 모드')}else e.textContent='비밀번호가 맞지 않습니다.'}
+async function whoami(v){try{const r=await SB.rpc('admin_whoami',{pw:v});return !r.error&&r.data&&r.data.name?r.data:null}catch(e){return null}}
 async function checkPw(v){try{const r=await SB.rpc('check_pw',{pw:v});return !r.error&&r.data===true}catch(e){return false}}
 let refT=null;
 async function loadAll(){
@@ -446,13 +486,14 @@ async function loadAll(){
     R=n; if(c.data){CFG={seg:[0,1,2].includes(c.data.seg)?c.data.seg:0,rest:Number.isFinite(c.data.rest)?c.data.rest:20}}
     LIVE=true;syncNote='';document.getElementById('sync').textContent='● 실시간';
   }catch(e){ if(!LIVE){syncNote='결과를 불러오지 못했습니다. 인터넷 연결을 확인해 주세요. 자동으로 다시 시도합니다.'} }
+  if(ADMIN&&VIEW==='log')loadLog();
   if(!document.getElementById('modal').innerHTML&&!typing())render();
 }
 function scheduleLoad(){clearTimeout(refT);refT=setTimeout(loadAll,300)}
 (async()=>{
   if(!window.supabase){syncNote='서버 연결 모듈을 불러오지 못했습니다. 새로고침해 주세요.';render();return}
   SB=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:false}});
-  try{const saved=localStorage.getItem('bd_pw');if(saved&&await checkPw(saved)){PW=saved;ADMIN=true}}catch(e){}
+  try{const saved=localStorage.getItem('bd_pw');const me=saved&&await whoami(saved);if(me){PW=saved;ME=me;ADMIN=true}}catch(e){}
   setRole(); await loadAll();
   SB.channel('live').on('postgres_changes',{event:'*',schema:'public',table:'results'},scheduleLoad).on('postgres_changes',{event:'*',schema:'public',table:'config'},scheduleLoad).subscribe();
   setInterval(loadAll,15000);
