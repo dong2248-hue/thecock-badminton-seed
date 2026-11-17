@@ -236,7 +236,7 @@ function vList(){
   const ms=D.matches.filter(m=>segs.includes(m.seg)&&m.gym===t.gym);
   const doneN=ms.filter(m=>done(m.id)).length;
   h+=`<div class="card tt-card"><h2><span class="gtag ${GYMC[t.gym]}">${GYM[t.gym]}</span> ${t.day===0?'11/21(토)':'11/22(일)'} <small>${COURTS[t.gym]}코트 · ${ms.length}경기 · 완료 ${doneN}</small></h2>
-  <div class="filters"><input type="search" placeholder="선수 이름으로 찾기 (해당 경기 강조)" value="${esc(TQ)}" oninput="TQ=this.value;renderKeep()"></div>
+  <div class="filters"><input type="search" placeholder="선수 이름으로 찾기 (해당 경기 강조)" value="${esc(TQ)}" oninput="TQ=this.value;applyTQ()"></div>
   ${ADMIN?'<div class="adminbar">✎ 관리자 모드 · 주황색 <b>점수 입력</b> 표시가 있는 칸을 누르면 점수를 넣을 수 있어요. 입력한 칸은 <b>수정</b>으로 바뀝니다.</div>':''}
   <div class="rnote">※ 표의 빈 칸은 한 선수가 3경기 연속 출전하지 않도록 휴식 시간을 보장하기 위한 것입니다.<br>※ 경기 순서와 코트 배정은 현장 상황에 따라 운영진이 조정할 수 있습니다.</div>
   <div class="scroll ttwrap"><table class="tt"><tr><th class="tcol">시각</th>${Array.from({length:COURTS[t.gym]},(_,i)=>`<th>${i+1}코트</th>`).join('')}</tr>`;
@@ -256,7 +256,7 @@ function vList(){
         if(done(m.id)){const aw=r.sa>r.sb;inner=line(m.a,r.sa,aw)+line(m.b,r.sb,!aw)}
         else inner=line(m.a,null)+line(m.b,null)+(r&&r.st==='live'?`<div class="lvt">● 진행${r.gym!==m.gym||r.court!==m.court?` (${GYM[r.gym].slice(0,3)} ${r.court}코트)`:''}</div>`:'');
         inner=`<div class="cno">${NO[m.id]}번</div>`+inner+(ADMIN?(done(m.id)?'<span class="edit re">✎ 수정</span>':'<span class="edit">✎ 점수 입력</span>'):'');
-        h+=`<td class="${cls}" ${ADMIN?`onclick="openScore('${m.id}')"`:''}>${inner}</td>`;
+        h+=`<td class="${cls}" data-p="${esc(m.a+'|'+m.b)}" ${ADMIN?`onclick="openScore('${m.id}')"`:''}>${inner}</td>`;
       }
       h+='</tr>';
     }
@@ -419,6 +419,8 @@ function render(){
   h+=({court:vCourt,list:vList,player:vPlayer,rank:vRank,self:vSelf,info:vInfo})[VIEW]();
   document.getElementById('app').innerHTML=h;
 }
+function applyTQ(){const q=TQ.trim();document.querySelectorAll('table.tt td.cell').forEach(td=>{const hit=!!q&&td.dataset.p.split('|').some(n=>n.includes(q));td.classList.toggle('hit',hit);td.classList.toggle('dim',!!q&&!hit)})}
+const typing=()=>{const a=document.activeElement;return a&&a.type==='search'};
 function renderKeep(){const a=document.activeElement,pos=a&&a.selectionStart;render();if(a&&a.type==='search'){const n=document.querySelector('input[type=search]');n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}}}
 window.addEventListener('hashchange',render);
 setInterval(()=>{if(VIEW==='court'&&!document.getElementById('modal').innerHTML)render()},30000);
@@ -444,7 +446,7 @@ async function loadAll(){
     R=n; if(c.data){CFG={seg:[0,1,2].includes(c.data.seg)?c.data.seg:0,rest:Number.isFinite(c.data.rest)?c.data.rest:20}}
     LIVE=true;syncNote='';document.getElementById('sync').textContent='● 실시간';
   }catch(e){ if(!LIVE){syncNote='결과를 불러오지 못했습니다. 인터넷 연결을 확인해 주세요. 자동으로 다시 시도합니다.'} }
-  if(!document.getElementById('modal').innerHTML)render();
+  if(!document.getElementById('modal').innerHTML&&!typing())render();
 }
 function scheduleLoad(){clearTimeout(refT);refT=setTimeout(loadAll,300)}
 (async()=>{
