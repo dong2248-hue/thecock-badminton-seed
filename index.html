@@ -220,7 +220,7 @@ function vList(){
   ${ADMIN?'<div class="adminbar">✎ 관리자 모드 · 주황색 <b>점수 입력</b> 표시가 있는 칸을 누르면 점수를 넣을 수 있어요. 입력한 칸은 <b>수정</b>으로 바뀝니다.</div>':''}
   <div class="scroll ttwrap"><table class="tt"><tr><th class="tcol">시각</th>${Array.from({length:COURTS[t.gym]},(_,i)=>`<th>${i+1}코트</th>`).join('')}</tr>`;
   for(const seg of segs){
-    if(seg===2) h+=`<tr class="lu"><td colspan="${COURTS[t.gym]+1}">점심·이동 ${lunchTxt()} · ${t.gym===0?'안흥초 팀 → 안흥초체육관으로 이동 · 태장초 팀 합류':'태장초 팀 → 이천중체육관으로 이동 · 안흥초 팀 합류'}</td></tr>`;
+    if(seg===2) h+=`<tr class="lu"><td colspan="${COURTS[t.gym]+1}">${lunchTxt()} · ${t.gym===0?'안흥초 팀 → 안흥초체육관으로 이동':'태장초 팀 → 이천중체육관으로 이동'}</td></tr>`;
     const times=[...new Set(D.matches.filter(m=>m.seg===seg).map(m=>m.time))].sort();
     for(const tm of times){
       h+=`<tr><th class="tcol">${tm}</th>`;
